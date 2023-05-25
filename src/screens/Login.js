@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import "../css/login.css";
 import { Link } from "react-router-dom"; // Import only Link
+import "../css/login.css";
+//import { NavBar } from "../components/NavBar";
+//import "../css/navbar.css";
 
 export const Login = (props) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  const [activeLink, setActiveLink] = useState("login");
+  //const [activeLink, setActiveLink] = useState("login");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(email);
-  };
-  const onUpdateActiveLink = (value) => {
-    setActiveLink(value);
   };
 
   return (
@@ -45,6 +44,10 @@ export const Login = (props) => {
       </form>
       <Link to="/register" className="link-btn">
         Don't have an account? Register here
+      </Link>
+      <br></br>
+      <Link to="/forgorpassword" className="link-btn">
+        Zaboravili ste lozinku? Kliknite ovdje.
       </Link>
     </div>
   );
