@@ -3,6 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { ArrowRightCircle } from "react-bootstrap-icons";
 import TrackVisibility from "react-on-screen";
 import "../css/banner.css";
+import { useNavigate } from "react-router-dom";
 
 export const Banner = () => {
   const [loopNum, setLoopNum] = useState(0);
@@ -12,6 +13,7 @@ export const Banner = () => {
   const [index, setIndex] = useState(1);
   const toRotate = ["olakšava", "pomaže", "organizuje"];
   const period = 2000;
+  const navigate = useNavigate();
 
   useEffect(() => {
     let ticker = setInterval(() => {
@@ -49,6 +51,9 @@ export const Banner = () => {
       setIndex((prevIndex) => prevIndex + 1);
     }
   };
+  const navigateToLogin = () => {
+    navigate("/login");
+  };
 
   return (
     <section className="banner" id="home">
@@ -79,7 +84,7 @@ export const Banner = () => {
                     opcije, možete stvoriti bolji život za svoju djecu i pomoći
                     im da ostvare svoj puni potencijal.
                   </p>
-                  <button onClick={() => console.log("connect")}>
+                  <button onClick={navigateToLogin}>
                     Započnite <ArrowRightCircle size={25} />
                   </button>
                 </div>

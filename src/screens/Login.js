@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import "../css/login.css";
+import { Link } from "react-router-dom"; // Import only Link
 
 export const Login = (props) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [activeLink, setActiveLink] = useState("login");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(email);
+  };
+  const onUpdateActiveLink = (value) => {
+    setActiveLink(value);
   };
 
   return (
@@ -32,16 +37,15 @@ export const Login = (props) => {
           id="password"
           name="password"
         />
-        <button type="submit" class="login-button">
-          Log In
-        </button>
+        <div class="container">
+          <button type="submit" class="login-button">
+            Log In
+          </button>
+        </div>
       </form>
-      <button
-        className="link-btn"
-        onClick={() => props.onFormSwitch("register")}
-      >
-        Don't have an account? Register here.
-      </button>
+      <Link to="/register" className="link-btn">
+        Don't have an account? Register here
+      </Link>
     </div>
   );
 };

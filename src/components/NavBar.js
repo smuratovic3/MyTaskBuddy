@@ -47,7 +47,7 @@ export const NavBar = () => {
             </Nav.Link>
             <Nav.Link
               as={Link} // Use Link instead of anchor tag
-              to="/register" // Specify the path for the register screen
+              to="/Register" // Specify the path for the register screen
               className={
                 activeLink === "register" ? "active navbar-link" : "navbar-link"
               }
