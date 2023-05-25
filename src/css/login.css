@@ -51,8 +51,15 @@
   }
 
   .login-button {
-    background-color: blue; /* Customize the background color */
-    color: white; /* Customize the text color */
-    /* Add any other styles you want */
+    background-color: blue; 
+    color: white; 
+    width: 200px; /* Set the width */
+  height: 50px; /* Set the height */  
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
   }
   
