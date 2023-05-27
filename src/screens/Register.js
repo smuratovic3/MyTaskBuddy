@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import "../css/register.css";
 import { Link } from "react-router-dom"; // Import only Link
+import { useNavigate } from "react-router-dom";
+
 export const Register = (props) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [name, setName] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(email);
+  };
+
+  const navigateToHomePage = () => {
+    navigate("/homepage");
   };
 
   return (
@@ -42,7 +49,11 @@ export const Register = (props) => {
           name="password"
         />
         <div class="containerRegistr">
-          <button type="submit" class="registr-button">
+          <button
+            onClick={navigateToHomePage}
+            type="submit"
+            class="registr-button"
+          >
             Register
           </button>
         </div>

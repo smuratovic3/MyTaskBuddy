@@ -1,5 +1,102 @@
 
 /************ Navbar Css ************/
+/*.App {
+  text-align: center;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-image: linear-gradient(79deg, #1b3ac2, #535ec7 48%, #F7944D);
+}*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 75px;
+}
+
+body {
+  font-weight: 400;
+  overflow-x: hidden;
+  position: relative;
+  
+  background-image: linear-gradient(79deg, #1b3ac2, #535ec7 48%, #F7944D);
+  color: #fff !important;
+  font-family: 'Centra', sans-serif !important;
+  
+}
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+}
+
+p, a, li, button, ul {
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+  text-decoration: none;
+  color:black;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+button {
+  border: 0;
+  background-color: transparent;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+}
+
+@media (min-width:1700px) {
+	main .container {
+		max-width: 100%;
+		padding: 0 150px;
+	}
+}
+
+p.success {
+	color: green;
+}
+
+p.danger {
+	color: red;
+}
+
+.scrolled {
+  background-color: #f8f9fa; /* Specify your desired background color */
+}
+
+.navbar-link {
+  color: #ffffff; /* Specify your desired link color */
+  margin-left: 15px; /* Specify your desired margin */
+}
+
+.active.navbar-link {
+  color: #ff0000; /* Specify your desired active link color */
+}
+
+.vvd {
+  background-color: #ffffff; /* Specify your desired button background color */
+  border: none;
+  padding: 10px 20px; /* Specify your desired padding */
+  font-size: 16px; /* Specify your desired font size */
+}
+
 nav.navbar {
     padding: 18px 0;
     position: fixed;
@@ -11,7 +108,12 @@ nav.navbar {
   .logo {
       display: flex;
       align-items: center;
+      width: 50px; /* Adjust the size as needed */
+      height: auto;
+      margin-right: 10px; /* Adjust the margin as needed */
     }
+   
+    
     
   nav.navbar.scrolled {
     padding: 0px 0;
@@ -22,7 +124,7 @@ nav.navbar {
   }
   nav.navbar .navbar-nav .nav-link.navbar-link {
     font-weight: 400;
-    color: #fff !important;
+    color: #ffffff !important;
     letter-spacing: 0.8px;
     padding: 0 25px;
     font-size: 18px;
