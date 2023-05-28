@@ -6,9 +6,10 @@ import Month from "../components/Month";
 import GlobalContext from "../context/GlobalContext";
 import EventModal from "../components/EventModal";
 import Sidebar from "../components/SideBar";
+import MenuBarHP from "../components/MenuBarHP";
 
 function HomePage() {
-  const [currenMonth, setCurrentMonth] = useState(getMonth());
+  const [currentMonth, setCurrentMonth] = useState(getMonth());
   const { monthIndex, showEventModal } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -20,10 +21,11 @@ function HomePage() {
       {showEventModal && <EventModal />}
 
       <div className="h-screen flex flex-col">
+        <MenuBarHP /> {/* Add the MenuBarHP component here */}
         <CalendarHeader />
         <div className="flex flex-1">
           <Sidebar />
-          <Month month={currenMonth} />
+          <Month month={currentMonth} />
         </div>
       </div>
     </React.Fragment>
