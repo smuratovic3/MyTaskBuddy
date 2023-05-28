@@ -172,6 +172,7 @@ function EventModal() {
                     AM
                   </label>
                 </div>
+
                 <div className="flex items-center space-x-2">
                   <input
                     type="radio"
@@ -187,7 +188,20 @@ function EventModal() {
                 </div>
               </div>
             </div>
-
+            <div className="flex items-center">
+              <span className="material-icons-outlined text-gray-400 text-3xl mr-2">
+                segment
+              </span>
+              <input
+                type="text"
+                name="description"
+                placeholder="Add a description"
+                value={description}
+                required
+                className="w-full pb-2 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500 text-gray-600"
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
             <div className="flex items-center space-x-2">
               <span className="material-icons-outlined text-gray-400 text-3xl">
                 location_on

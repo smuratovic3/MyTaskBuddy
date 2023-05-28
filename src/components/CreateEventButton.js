@@ -9,6 +9,7 @@ function CreateEventButton() {
       style={{
         border: "1px solid",
         padding: "0.5rem",
+        marginTop: "100px",
         borderRadius: "9999px",
         display: "flex",
         alignItems: "center",
