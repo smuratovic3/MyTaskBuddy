@@ -6,6 +6,7 @@ import Register from "./screens/Register";
 import ForgotPassword from "./screens/ForgotPassword";
 import HomePage from "./screens/HomePage";
 import EditProfile from "./screens/EditProfile";
+import Statistics from "./screens/Statistics";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/homepage" element={<HomePage />} />
           <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/statistics" element={<Statistics />} />
         </Routes>
       </div>
     </Router>

@@ -1,75 +1,122 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const MenuBar = () => {
-  const menuBarStyle = {
-    background: "linear-gradient(79deg, #1b3ac2, #535ec7 48%, #F7944D)",
-    padding: "10px",
+  const [hoveredLink, setHoveredLink] = useState(null);
+
+  const handleHover = (index) => {
+    setHoveredLink(index);
   };
 
-  const menuItemsStyle = {
-    listStyleType: "none",
-    display: "flex",
-    justifyContent: "flex-end",
-    margin: "0",
-    padding: "0",
+  const handleLeave = () => {
+    setHoveredLink(null);
   };
 
-  const menuItemStyle = {
-    marginRight: "20px",
-  };
+  const getLinkStyle = (index) => {
+    const baseStyle = {
+      textDecoration: "none",
+      color: "#000",
+      transition: "color 0.3s",
+    };
 
-  const linkStyle = {
-    textDecoration: "none",
-    color: "#fff",
-    fontWeight: "bold",
-    padding: "10px",
-    borderRadius: "4px",
-    transition: "background-color 0.3s ease",
-  };
+    if (index === hoveredLink) {
+      return { ...baseStyle, color: "blue" };
+    }
 
-  const handleHover = (event) => {
-    event.target.style.backgroundColor = "#555";
-  };
-
-  const handleLeave = (event) => {
-    event.target.style.backgroundColor = "";
+    return baseStyle;
   };
 
   return (
-    <div style={menuBarStyle}>
-      <ul style={menuItemsStyle}>
-        <li style={menuItemStyle}>
-          <a
-            href="/editprofile"
-            style={linkStyle}
-            onMouseEnter={handleHover}
-            onMouseLeave={handleLeave}
-          >
-            Uredi profil
-          </a>
-        </li>
-        <li style={menuItemStyle}>
-          <a
-            href="/statistika"
-            style={linkStyle}
-            onMouseEnter={handleHover}
-            onMouseLeave={handleLeave}
-          >
-            Statistika
-          </a>
-        </li>
-        <li style={menuItemStyle}>
-          <a
-            href="/"
-            style={linkStyle}
-            onMouseEnter={handleHover}
-            onMouseLeave={handleLeave}
-          >
-            Odjava
-          </a>
-        </li>
-      </ul>
-    </div>
+    <form>
+      <nav
+        style={{
+          backgroundColor: "#f8f9fa",
+          padding: "10px 20px",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Link
+          to={"/homepage"}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            textDecoration: "none",
+            color: "#000",
+          }}
+        >
+          <img
+            src="/assets/images/logo.png"
+            alt="MyTaskBuddy Logo"
+            width="30"
+            height="30"
+            style={{ marginRight: "10px" }}
+          />
+          <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+            MyTaskBuddy
+          </span>
+        </Link>
+
+        <ul
+          style={{
+            display: "flex",
+            listStyle: "none",
+            margin: 0,
+            padding: 0,
+          }}
+        >
+          <li style={{ marginRight: "35px" }}>
+            <Link
+              to={"/homepage"}
+              style={getLinkStyle(0)}
+              onMouseEnter={() => handleHover(0)}
+              onMouseLeave={handleLeave}
+            >
+              Početna
+            </Link>
+          </li>
+          <li style={{ marginRight: "35px" }}>
+            <Link
+              to={"/editprofile"}
+              style={getLinkStyle(1)}
+              onMouseEnter={() => handleHover(1)}
+              onMouseLeave={handleLeave}
+            >
+              Profil
+            </Link>
+          </li>
+          <li style={{ marginRight: "35px" }}>
+            <Link
+              to={"/statistics"}
+              style={{
+                ...getLinkStyle(2),
+                fontWeight: "bold",
+              }}
+              onMouseEnter={() => handleHover(2)}
+              onMouseLeave={handleLeave}
+            >
+              Statistika
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={"/login"}
+              style={getLinkStyle(3)}
+              onMouseEnter={() => handleHover(3)}
+              onMouseLeave={handleLeave}
+            >
+              ODJAVA
+            </Link>
+          </li>
+        </ul>
+      </nav>
+      <div></div>
+    </form>
   );
 };
 
