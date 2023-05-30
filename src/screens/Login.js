@@ -93,17 +93,17 @@ export const Login = (props) => {
       <div className="auth-form-container">
         <h2>Login</h2>
         <form className="login-form" onSubmit={handleSubmit}>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">E-mail</label>
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
-            placeholder="youremail@gmail.com"
+            placeholder="vasemail@gmail.com"
             id="email"
             name="email"
             style={{ color: "black" }} // Set text color to black
           />
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Lozinka</label>
           <input
             value={pass}
             onChange={(e) => setPass(e.target.value)}
@@ -119,7 +119,7 @@ export const Login = (props) => {
               type="submit"
               className="login-button"
             >
-              Log In
+              Prijavi se
             </button>
           </div>
         </form>
@@ -128,7 +128,7 @@ export const Login = (props) => {
           className="link-btn"
           style={{ textDecoration: "none" }}
         >
-          <span>Don't have an account? Register here</span>
+          <span>Nemate račun? Registrujte se ovdje!</span>
         </Link>
         <br />
         <Link

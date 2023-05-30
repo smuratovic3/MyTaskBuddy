@@ -106,7 +106,7 @@ export const ForgotPassword = (props) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
-            placeholder="youremail@gmail.com"
+            placeholder="vasemail@gmail.com"
             id="email"
             name="email"
             style={{ color: "black" }} // Set text color to black

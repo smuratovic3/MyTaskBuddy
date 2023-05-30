@@ -96,26 +96,35 @@ export const Register = (props) => {
       <div className="auth-form-container">
         <h2>Register</h2>
         <form className="register-form" onSubmit={handleSubmit}>
-          <label htmlFor="name">Full name</label>
+          <label htmlFor="name">Ime</label>
           <input
             value={name}
             name="name"
             onChange={(e) => setName(e.target.value)}
             id="name"
-            placeholder="Full Name"
+            placeholder="Ime"
             style={{ color: "black" }} // Set text color to black
           />
-          <label htmlFor="email">Email</label>
+          <label htmlFor="surname">Prezime</label>
+          <input
+            value={name}
+            name="surname"
+            onChange={(e) => setName(e.target.value)}
+            id="surname"
+            placeholder="Prezime"
+            style={{ color: "black" }} // Set text color to black
+          />
+          <label htmlFor="email">E-mail</label>
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
-            placeholder="youremail@gmail.com"
+            placeholder="vasemail@gmail.com"
             id="email"
             name="email"
             style={{ color: "black" }} // Set text color to black
           />
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Lozinka</label>
           <input
             value={pass}
             onChange={(e) => setPass(e.target.value)}
@@ -141,12 +150,12 @@ export const Register = (props) => {
               type="submit"
               className="registr-button"
             >
-              Register
+              Registruj se
             </button>
           </div>
         </form>
         <Link to="/login" className="link-btn">
-          Already have an account? Login here.
+          Već imate račun? Prijavite se ovdje.
         </Link>
       </div>
     </>
