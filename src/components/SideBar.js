@@ -4,11 +4,11 @@ import SmallCalendar from "./SmallCalendar";
 import Labels from "./Labels";
 
 const sidebarStyle = {
-  padding: "5px",
+  padding: "-20px",
   width: "220px",
   position: "fixed",
-  top: "0",
-  left: "0",
+  top: "20px",
+  left: "5px",
   height: "100vh",
   marginLeft: "20px",
 };

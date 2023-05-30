@@ -19,17 +19,25 @@ function Day({ day, rowIdx }) {
   }, [filteredEvents, day]);
 
   function getCurrentDayClass() {
-    return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
+    const isCurrentDay = day.format("DD-MM-YY") === dayjs().format("DD-MM-YY");
+    return isCurrentDay
       ? "bg-blue-600 text-white rounded-full w-7"
-      : "";
+      : "text-black";
   }
+
+  function getLocalizedDayName() {
+    const daysInBosnian = ["NED", "PON", "UTO", "SRI", "ČET", "PET", "SUB"];
+    const dayIndex = day.day();
+    return daysInBosnian[dayIndex];
+  }
+
   return (
-    <div className="border border-gray-200 flex flex-col">
+    <div className="custom-border flex flex-col">
       <header className="flex flex-col items-center">
         {rowIdx === 0 && (
-          <p className="text-sm mt-1">{day.format("ddd").toUpperCase()}</p>
+          <p className="text-sm mt-1 text-black">{getLocalizedDayName()}</p>
         )}
-        <p className={`text-sm p-1 my-1 text-center  ${getCurrentDayClass()}`}>
+        <p className={`text-sm p-1 my-1 text-center ${getCurrentDayClass()}`}>
           {day.format("DD")}
         </p>
       </header>
@@ -44,13 +52,27 @@ function Day({ day, rowIdx }) {
           <div
             key={idx}
             onClick={() => setSelectedEvent(evt)}
-            className={`bg-${evt.label}-200 p-1 mr-3 text-white-600 text-sm rounded mb-1 truncate`}
+            className={`bg-${evt.label}-200 p-1 mr-3 text-black text-sm font-bold rounded mb-1 truncate`}
           >
             {evt.title}
           </div>
         ))}
       </div>
+      <style>{`
+        .custom-border {
+          border: 0.5px solid black;
+          width: 130px;
+          background-color: white;
+        }
+
+        @media screen and (max-width: 768px) {
+          .custom-border {
+            width: 80px;
+          }
+        }
+      `}</style>
     </div>
   );
 }
+
 export default Day;

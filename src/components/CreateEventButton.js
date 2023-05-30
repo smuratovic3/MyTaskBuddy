@@ -26,7 +26,7 @@ function CreateEventButton() {
         style={{ width: "1.75rem", height: "1.75rem" }}
       />
       <span style={{ paddingLeft: "0.75rem", paddingRight: "1.75rem" }}>
-        Create
+        Kreiraj zadatak
       </span>
     </button>
   );

@@ -5,7 +5,7 @@ function Labels() {
   const { labels, updateLabel } = useContext(GlobalContext);
   return (
     <React.Fragment>
-      <p className="text-white-500 font-bold mt-10">Label</p>
+      <p className="text-white font-bold mt-10">Labela boja</p>
       {labels.map(({ label: lbl, checked }, idx) => (
         <label key={idx} className="items-center mt-3 block">
           <input
@@ -14,10 +14,11 @@ function Labels() {
             onChange={() => updateLabel({ label: lbl, checked: !checked })}
             className={`form-checkbox h-5 w-5 text-${lbl}-400 rounded focus:ring-0 cursor-pointer`}
           />
-          <span className="ml-2 text-white-700 capitalize">{lbl}</span>
+          <span className="ml-2 text-white font-bold capitalize">{lbl}</span>
         </label>
       ))}
     </React.Fragment>
   );
 }
+
 export default Labels;

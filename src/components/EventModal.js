@@ -8,8 +8,11 @@ function EventModal() {
     useContext(GlobalContext);
 
   const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : "");
-  const [description, setDescription] = useState(
-    selectedEvent ? selectedEvent.description : ""
+  const [isImportantTask, setIsImportantTask] = useState(
+    selectedEvent ? selectedEvent.isImportantTask : false
+  );
+  const [subtasks, setSubtasks] = useState(
+    selectedEvent ? selectedEvent.subtasks : []
   );
   const [selectedLabel, setSelectedLabel] = useState(
     selectedEvent
@@ -22,12 +25,6 @@ function EventModal() {
   const [endTime, setEndTime] = useState(
     selectedEvent ? selectedEvent.endTime : ""
   );
-  const [startPeriod, setStartPeriod] = useState(
-    selectedEvent ? selectedEvent.startPeriod : "AM"
-  );
-  const [endPeriod, setEndPeriod] = useState(
-    selectedEvent ? selectedEvent.endPeriod : "AM"
-  );
   const [location, setLocation] = useState(
     selectedEvent ? selectedEvent.location : ""
   );
@@ -36,13 +33,12 @@ function EventModal() {
     e.preventDefault();
     const calendarEvent = {
       title,
-      description,
+      isImportantTask,
+      subtasks,
       label: selectedLabel,
       day: daySelected.valueOf(),
       startTime,
       endTime,
-      startPeriod,
-      endPeriod,
       location,
       id: selectedEvent ? selectedEvent.id : Date.now(),
     };
@@ -55,9 +51,14 @@ function EventModal() {
     setShowEventModal(false);
   }
 
+  function handleSubtasksChange(e) {
+    const inputSubtasks = e.target.value.split("\n");
+    setSubtasks(inputSubtasks);
+  }
+
   return (
     <div className="fixed top-0 left-0 w-full h-screen flex justify-center items-center">
-      <form className="w-1/3 bg-white rounded-lg shadow-2xl">
+      <form className="w-1/2 bg-white rounded-lg shadow-2xl">
         <header className="flex justify-between items-center px-4 py-2 bg-gray-100">
           <span className="material-icons-outlined text-gray-400 text-xl">
             drag_handle
@@ -69,7 +70,7 @@ function EventModal() {
                   dispatchCalEvent({ type: "delete", payload: selectedEvent });
                   setShowEventModal(false);
                 }}
-                className="material-icons-outlined text-gray-400 cursor-pointer"
+                className="material-icons-outlined text-gray-400 cursor-pointer mr-4"
               >
                 delete
               </span>
@@ -83,6 +84,19 @@ function EventModal() {
         </header>
         <div className="p-6">
           <div className="space-y-4">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="isImportantTask"
+                name="isImportantTask"
+                checked={isImportantTask}
+                onChange={(e) => setIsImportantTask(e.target.checked)}
+              />
+              <label htmlFor="isImportantTask" className="ml-2 text-black">
+                Bitan zadatak
+              </label>
+            </div>
+
             <input
               type="text"
               name="title"
@@ -92,6 +106,14 @@ function EventModal() {
               className="w-full pb-2 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500 text-2xl font-semibold text-gray-600"
               onChange={(e) => setTitle(e.target.value)}
             />
+            <div className="mt-4">
+              <label className="text-black">Podzadaci:</label>
+              <textarea
+                value={subtasks.join("\n")}
+                className="w-full px-2 py-1 border border-gray-300 rounded text-black"
+                onChange={handleSubtasksChange}
+              ></textarea>
+            </div>
 
             <div>
               <p className="text-xl text-black">
@@ -112,33 +134,6 @@ function EventModal() {
                     className="w-20 px-2 py-1 border border-gray-300 rounded text-black"
                     onChange={(e) => setStartTime(e.target.value)}
                   />
-                  <span className="text-black">{startPeriod}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    id="startPeriodAM"
-                    name="startPeriod"
-                    value="AM"
-                    checked={startPeriod === "AM"}
-                    onChange={(e) => setStartPeriod(e.target.value)}
-                  />
-                  <label htmlFor="startPeriodAM" className="text-black">
-                    AM
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    id="startPeriodPM"
-                    name="startPeriod"
-                    value="PM"
-                    checked={startPeriod === "PM"}
-                    onChange={(e) => setStartPeriod(e.target.value)}
-                  />
-                  <label htmlFor="startPeriodPM" className="text-black">
-                    PM
-                  </label>
                 </div>
               </div>
 
@@ -157,51 +152,10 @@ function EventModal() {
                     className="w-20 px-2 py-1 border border-gray-300 rounded text-black"
                     onChange={(e) => setEndTime(e.target.value)}
                   />
-                  <span className="text-black">{endPeriod}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    id="endPeriodAM"
-                    name="endPeriod"
-                    value="AM"
-                    checked={endPeriod === "AM"}
-                    onChange={(e) => setEndPeriod(e.target.value)}
-                  />
-                  <label htmlFor="endPeriodAM" className="text-black">
-                    AM
-                  </label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    id="endPeriodPM"
-                    name="endPeriod"
-                    value="PM"
-                    checked={endPeriod === "PM"}
-                    onChange={(e) => setEndPeriod(e.target.value)}
-                  />
-                  <label htmlFor="endPeriodPM" className="text-black">
-                    PM
-                  </label>
                 </div>
               </div>
             </div>
-            <div className="flex items-center">
-              <span className="material-icons-outlined text-gray-400 text-3xl mr-2">
-                segment
-              </span>
-              <input
-                type="text"
-                name="description"
-                placeholder="Add a description"
-                value={description}
-                required
-                className="w-full pb-2 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500 text-gray-600"
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
+
             <div className="flex items-center space-x-2">
               <span className="material-icons-outlined text-gray-400 text-3xl">
                 location_on

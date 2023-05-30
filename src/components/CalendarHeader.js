@@ -4,6 +4,22 @@ import GlobalContext from "../context/GlobalContext";
 
 function CalendarHeader() {
   const { monthIndex, setMonthIndex } = useContext(GlobalContext);
+
+  const bosnianMonthNames = [
+    "Januar",
+    "Februar",
+    "Mart",
+    "April",
+    "Maj",
+    "Juni",
+    "Juli",
+    "August",
+    "Septembar",
+    "Oktobar",
+    "Novembar",
+    "Decembar",
+  ];
+
   function handlePrevMonth() {
     setMonthIndex(monthIndex - 1);
   }
@@ -28,20 +44,20 @@ function CalendarHeader() {
           alt="calendar"
           className="mr-2 w-12 h-12"
         />
-        <h1 className="mr-10 text-xl text-white-500 font-bold">Calendar</h1>
+        <h1 className="mr-10 text-xl text-white-500 font-bold">Kalendar</h1>
         <button
           onClick={handleReset}
           style={{
             border: "1px solid",
             borderRadius: "3px",
             padding: "4px 8px",
-            fontSize: "12px",
-            backgroundColor: "gray",
+            fontSize: "16px",
+            backgroundColor: "white",
             color: "black",
             marginRight: "10px",
           }}
         >
-          Today
+          Danas
         </button>
         <span
           onClick={handlePrevMonth}
@@ -56,7 +72,7 @@ function CalendarHeader() {
           <span className="material-icons-outlined">chevron_right</span>
         </span>
         <h2 className="text-xl text-white-500 font-bold">
-          {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
+          {`${bosnianMonthNames[monthIndex]} ${dayjs().year()}`}
         </h2>
       </div>
     </header>

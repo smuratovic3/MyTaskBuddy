@@ -13,6 +13,21 @@ function SmallCalendar() {
   const { monthIndex, setSmallCalendarMonth, setDaySelected, daySelected } =
     useContext(GlobalContext);
 
+  const bosnianMonthNames = [
+    "Januar",
+    "Februar",
+    "Mart",
+    "April",
+    "Maj",
+    "Jun",
+    "Jul",
+    "Avgust",
+    "Septembar",
+    "Oktobar",
+    "Novembar",
+    "Decembar",
+  ];
+
   useEffect(() => {
     setCurrentMonthIdx(monthIndex);
   }, [monthIndex]);
@@ -46,19 +61,26 @@ function SmallCalendar() {
       };
     } else {
       return {
-        backgroundColor: "orange",
+        backgroundColor: "white",
         borderRadius: "50%",
         color: "black",
       };
     }
   }
 
+  function getLocalizedDayName(day) {
+    const daysInBosnian = ["NED", "PON", "UTO", "SRI", "ČET", "PET", "SUB"];
+    const dayIndex = day.day();
+    return daysInBosnian[dayIndex];
+  }
+
   return (
     <div className="mt-9">
       <header className="flex justify-between">
         <p className="text-white-500 font-bold">
-          {dayjs(new Date(dayjs().year(), currentMonthIdx)).format("MMMM YYYY")}
+          {`${bosnianMonthNames[currentMonthIdx]} ${dayjs().year()}`}
         </p>
+
         <div>
           <span onClick={handlePrevMonth} className="cursor-pointer">
             <span className="material-icons-outlined text-white-600 mx-2">
@@ -75,11 +97,11 @@ function SmallCalendar() {
       </header>
       <div
         className="grid grid-cols-7 grid-rows-6"
-        style={{ backgroundColor: "orange" }}
+        style={{ backgroundColor: "white" }}
       >
         {currentMonth[0].map((day, i) => (
-          <span key={i} className="text-sm py-1 text-center">
-            {day.format("dd").charAt(0)}
+          <span key={i} className="text-sm py-1 text-center custom-span">
+            {getLocalizedDayName(day)}
           </span>
         ))}
         {currentMonth.map((row, i) => (
@@ -103,6 +125,15 @@ function SmallCalendar() {
           </React.Fragment>
         ))}
       </div>
+      <style>{`
+        .custom-span {
+          color: black;
+        }
+
+        @media screen and (max-width: 768px) {
+          /* Add responsive styles for smaller screens if needed */
+        }
+      `}</style>
     </div>
   );
 }
