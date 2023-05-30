@@ -126,62 +126,56 @@ const EditProfile = () => {
               <div className="p-4">
                 <img
                   className="rounded-circle profile-picture"
-                  src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+                  src="./assets/images/userimg.jpg"
                   alt="Profile Picture"
                 />
-                <h4 className="mt-3 font-weight-bold profile-name">Edogaru</h4>
+                <h4
+                  className="mt-3 font-weight-bold profile-name"
+                  style={{ color: "black" }}
+                >
+                  Semina
+                </h4>
+
                 <span className="text-black-50 profile-email">
-                  edogaru@mail.com.my
+                  semina1@mail.com
                 </span>
               </div>
             </div>
             <div className="col-md-8">
               <div className="p-4">
-                <h4 className="text-right profile-title">Profile Settings</h4>
+                <h4 className="text-right profile-title">Postavke profila</h4>
                 <div className="row mt-4">
                   <div className="col-md-6">
-                    <label className="labels">Name</label>
+                    <label className="labels">Ime</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="First Name"
+                      placeholder="Ime"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
                       style={{ color: "black" }}
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="labels">Surname</label>
+                    <label className="labels">Prezime</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Surname"
+                      placeholder="Prezime"
                       value={surname}
                       onChange={(e) => setSurname(e.target.value)}
                       style={{ color: "black" }}
                     />
                   </div>
                 </div>
+
                 <div className="row mt-3">
                   <div className="col-md-12">
-                    <label className="labels">Mobile Number</label>
+                    <label className="labels">Promijeni e-mail</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Enter Phone Number"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      style={{ color: "black" }}
-                    />
-                  </div>
-                </div>
-                <div className="row mt-3">
-                  <div className="col-md-12">
-                    <label className="labels">Change Email</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter New Email"
+                      placeholder="Unesite novi e-mail"
                       value={newEmail}
                       onChange={(e) => setNewEmail(e.target.value)}
                       style={{ color: "black" }}
@@ -190,11 +184,11 @@ const EditProfile = () => {
                 </div>
                 <div className="row mt-3">
                   <div className="col-md-12">
-                    <label className="labels">Change Password</label>
+                    <label className="labels">Promijenite lozinku</label>
                     <input
                       type="password"
                       className="form-control"
-                      placeholder="Enter New Password"
+                      placeholder="Unesite novu lozinku"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       style={{ color: "black" }}
