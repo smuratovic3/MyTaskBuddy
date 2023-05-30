@@ -31,7 +31,33 @@ function EventModal() {
   const [priority, setPriority] = useState(
     selectedEvent ? selectedEvent.priority : ""
   );
+  const bosnianMonthNames = [
+    "Januar",
+    "Februar",
+    "Mart",
+    "April",
+    "Maj",
+    "Juni",
+    "Juli",
+    "August",
+    "Septembar",
+    "Oktobar",
+    "Novembar",
+    "Decembar",
+  ];
 
+  function getBosnianDayOfWeek(day) {
+    const bosnianDaysOfWeek = [
+      "Nedjelja",
+      "Ponedjeljak",
+      "Utorak",
+      "Srijeda",
+      "Četvrtak",
+      "Petak",
+      "Subota",
+    ];
+    return bosnianDaysOfWeek[day];
+  }
   function handleSubmit(e) {
     e.preventDefault();
     const calendarEvent = {
@@ -54,11 +80,21 @@ function EventModal() {
     setShowEventModal(false);
   }
 
-  function handleSubtasksChange(e) {
-    const inputSubtasks = e.target.value.split("\n");
-    setSubtasks(inputSubtasks);
+  function handleSubtasksChange(index, updatedSubtask) {
+    const updatedSubtasks = [...subtasks];
+    updatedSubtasks[index] = updatedSubtask;
+    setSubtasks(updatedSubtasks);
   }
 
+  function handleAddSubtask() {
+    setSubtasks([...subtasks, { name: "", description: "" }]);
+  }
+
+  function handleRemoveSubtask(index) {
+    const updatedSubtasks = [...subtasks];
+    updatedSubtasks.splice(index, 1);
+    setSubtasks(updatedSubtasks);
+  }
   return (
     <div className="fixed top-0 left-0 w-full h-screen flex justify-center items-center">
       <form className="w-1/2 bg-white rounded-lg shadow-2xl">
@@ -66,24 +102,32 @@ function EventModal() {
           <span className="material-icons-outlined text-gray-400 text-xl">
             drag_handle
           </span>
+
           <div>
             {selectedEvent && (
-              <span
-                onClick={() => {
-                  dispatchCalEvent({ type: "delete", payload: selectedEvent });
-                  setShowEventModal(false);
-                }}
-                className="material-icons-outlined text-gray-400 cursor-pointer mr-4"
-              >
-                delete
-              </span>
+              <div className="flex items-center">
+                <span
+                  onClick={() => {
+                    dispatchCalEvent({
+                      type: "delete",
+                      payload: selectedEvent,
+                    });
+                    setShowEventModal(false);
+                  }}
+                  className="material-icons-outlined text-gray-400 cursor-pointer mr-2"
+                >
+                  delete
+                </span>
+                <span className="text-black">Obriši zadatak</span>
+              </div>
             )}
-            <button onClick={() => setShowEventModal(false)}>
-              <span className="material-icons-outlined text-white text-xl">
-                close
-              </span>
-            </button>
           </div>
+
+          <button onClick={() => setShowEventModal(false)}>
+            <span className="material-icons-outlined text-white text-xl">
+              close
+            </span>
+          </button>
         </header>
         <div className="p-6">
           <div className="space-y-4">
@@ -97,7 +141,6 @@ function EventModal() {
                 onChange={(e) => setPriority(e.target.value)}
               >
                 <option value="">Prioritet zadataka</option>
-
                 <option value="high">Visok</option>
               </select>
             </div>
@@ -110,18 +153,59 @@ function EventModal() {
               className="w-full pb-2 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500 text-2xl font-semibold text-gray-600"
               onChange={(e) => setTitle(e.target.value)}
             />
-            <div className="mt-4">
-              <label className="text-black">Podzadaci:</label>
-              <textarea
-                value={subtasks.join("\n")}
-                className="w-full px-2 py-1 border border-gray-300 rounded text-black"
-                onChange={handleSubtasksChange}
-              ></textarea>
+            <div className="mt-4 flex items-center">
+              <label className="text-black mr-2">Podzadaci:</label>
+              <div className="subtask-container h-32 overflow-y-auto">
+                {subtasks.map((subtask, index) => (
+                  <div key={index} className="flex items-center space-x-4">
+                    <input
+                      type="text"
+                      placeholder="Naziv podzadatka"
+                      value={subtask.name}
+                      className="w-1/2 px-2 py-1 border border-gray-300 rounded text-black"
+                      onChange={(e) =>
+                        handleSubtasksChange(index, {
+                          ...subtask,
+                          name: e.target.value,
+                        })
+                      }
+                    />
+                    <textarea
+                      placeholder="Opis podzadatka"
+                      value={subtask.description}
+                      className="w-1/2 px-2 py-1 border border-gray-300 rounded text-black resize-none"
+                      onChange={(e) =>
+                        handleSubtasksChange(index, {
+                          ...subtask,
+                          description: e.target.value,
+                        })
+                      }
+                    ></textarea>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveSubtask(index)}
+                      className="text-red-500"
+                    >
+                      Ukloni
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={handleAddSubtask}
+                className="mt-2 ml-2 text-blue-500"
+              >
+                Dodaj podzadatak
+              </button>
             </div>
 
             <div>
               <p className="text-xl text-black">
-                {daySelected.format("dddd, MMMM DD")}
+                {daySelected &&
+                  `${getBosnianDayOfWeek(daySelected.day())}, ${
+                    bosnianMonthNames[daySelected.month()]
+                  } ${daySelected.date()}`}
               </p>
               <div className="flex items-center mt-2 space-x-4">
                 <div className="flex items-center space-x-2">
@@ -197,6 +281,13 @@ function EventModal() {
           </div>
 
           <footer className="flex justify-end p-4 mt-5 border-t">
+            <button
+              type="button"
+              onClick={() => setShowEventModal(false)}
+              className="px-4 py-2 mr-2 text-sm font-medium text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+            >
+              Odustani
+            </button>
             <button
               type="submit"
               onClick={handleSubmit}
