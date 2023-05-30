@@ -28,6 +28,9 @@ function EventModal() {
   const [location, setLocation] = useState(
     selectedEvent ? selectedEvent.location : ""
   );
+  const [priority, setPriority] = useState(
+    selectedEvent ? selectedEvent.priority : ""
+  );
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -84,19 +87,20 @@ function EventModal() {
         </header>
         <div className="p-6">
           <div className="space-y-4">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="isImportantTask"
-                name="isImportantTask"
-                checked={isImportantTask}
-                onChange={(e) => setIsImportantTask(e.target.checked)}
-              />
-              <label htmlFor="isImportantTask" className="ml-2 text-black">
-                Bitan zadatak
-              </label>
-            </div>
+            <div className="flex items-center space-x-2">
+              <span className="material-icons-outlined text-gray-400 text-3xl">
+                priority_high
+              </span>
+              <select
+                value={priority}
+                className="w-full border border-gray-300 rounded text-black"
+                onChange={(e) => setPriority(e.target.value)}
+              >
+                <option value="">Prioritet zadataka</option>
 
+                <option value="high">Visok</option>
+              </select>
+            </div>
             <input
               type="text"
               name="title"
