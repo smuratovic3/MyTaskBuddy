@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import GlobalContext from "../context/GlobalContext";
 
 const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
@@ -7,6 +7,7 @@ function EventModal() {
   const { setShowEventModal, daySelected, dispatchCalEvent, selectedEvent } =
     useContext(GlobalContext);
 
+  const modalRef = useRef(null); // Create a ref for the modal container
   const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : "");
   const [isImportantTask, setIsImportantTask] = useState(
     selectedEvent ? selectedEvent.isImportantTask : false
@@ -95,9 +96,23 @@ function EventModal() {
     updatedSubtasks.splice(index, 1);
     setSubtasks(updatedSubtasks);
   }
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setShowEventModal(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setShowEventModal]);
+
   return (
     <div className="fixed top-0 left-0 w-full h-screen flex justify-center items-center">
-      <form className="w-1/2 bg-white rounded-lg shadow-2xl">
+      <div ref={modalRef} className="w-1/3 bg-white rounded-lg shadow-2xl">
         <header className="flex justify-between items-center px-4 py-2 bg-gray-100">
           <span className="material-icons-outlined text-gray-400 text-xl">
             drag_handle
@@ -129,7 +144,10 @@ function EventModal() {
             </span>
           </button>
         </header>
-        <div className="p-6">
+        <div
+          className="p-6"
+          style={{ paddingBottom: "0px", paddingTop: "0px" }}
+        >
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <span className="material-icons-outlined text-gray-400 text-3xl">
@@ -207,6 +225,21 @@ function EventModal() {
                     bosnianMonthNames[daySelected.month()]
                   } ${daySelected.date()}`}
               </p>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="assignee"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Zadatak dodjeljujete:
+                </label>
+                <input
+                  type="text"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black"
+                  readOnly={false}
+                />
+              </div>
+
               <div className="flex items-center mt-2 space-x-4">
                 <div className="flex items-center space-x-2">
                   <label htmlFor="startTime" className="text-black">
@@ -290,14 +323,14 @@ function EventModal() {
             </button>
             <button
               type="submit"
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
               onClick={handleSubmit}
-              className="px-6 py-2 rounded bg-blue-500 hover:bg-blue-600 text-white"
             >
-              Sačuvaj
+              {selectedEvent ? "Ažuriraj zadatak" : "Dodaj zadatak"}
             </button>
           </footer>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
