@@ -62,7 +62,7 @@ export const ForgotPassword = (props) => {
                   color: "#000",
                   transition: "color 0.3s",
                 }}
-                activeStyle={{ color: "blue" }}
+                activestyle={{ color: "blue" }}
               >
                 Početna
               </Link>
@@ -77,7 +77,7 @@ export const ForgotPassword = (props) => {
                   fontWeight: "bold",
                   transition: "color 0.3s",
                 }}
-                activeStyle={{ color: "blue" }}
+                activestyle={{ color: "blue" }}
               >
                 Prijavi se
               </Link>
@@ -90,7 +90,7 @@ export const ForgotPassword = (props) => {
                   color: "#000",
                   transition: "color 0.3s",
                 }}
-                activeStyle={{ color: "blue" }}
+                activestyle={{ color: "blue" }}
               >
                 Registruj se
               </Link>

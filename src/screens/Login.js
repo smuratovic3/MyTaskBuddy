@@ -2,19 +2,40 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../css/login.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const Login = (props) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email);
-  };
+    try {
+      console.log("Prije responsa");
+      const response = await axios.post("http://localhost:8000/login", {
+        email: email,
+        password: pass,
+      });
+      console.log("Response", response);
 
-  const navigateToHomePage = () => {
-    navigate("/homepage");
+      if (response.status === 200) {
+        // Extract the parent ID from the response
+        const parentId = response.data.parentId;
+        setMessage("");
+
+        navigate("/homepage");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        // Invalid username or password
+        setMessage("Nevalidan e-mail ili lozinka");
+      } else {
+        // Other errors
+        setMessage("Greška");
+      }
+    }
   };
 
   return (
@@ -69,7 +90,7 @@ export const Login = (props) => {
                 color: "#000",
                 transition: "color 0.3s",
               }}
-              activeStyle={{ color: "blue" }}
+              activestyle={{ color: "blue" }}
             >
               Početna
             </Link>
@@ -82,7 +103,7 @@ export const Login = (props) => {
                 color: "#000",
                 transition: "color 0.3s",
               }}
-              activeStyle={{ color: "blue" }}
+              activestyle={{ color: "blue" }}
             >
               Registruj se
             </Link>
@@ -113,12 +134,9 @@ export const Login = (props) => {
             name="password"
             style={{ color: "black" }} // Set text color to black
           />
+          {message ? <p className="message">{message}</p> : null}
           <div className="container">
-            <button
-              onClick={navigateToHomePage}
-              type="submit"
-              className="login-button"
-            >
+            <button type="submit" className="login-button">
               Prijavi se
             </button>
           </div>

@@ -61,7 +61,8 @@ function Day({ day, rowIdx }) {
       <style>{`
         .custom-border {
           border: 0.5px solid black;
-          width: 130px;
+          width: 150px;
+          height:150px;
           background-color: white;
         }
 

@@ -72,7 +72,7 @@ export const Register = (props) => {
                   color: "#000",
                   transition: "color 0.3s",
                 }}
-                activeStyle={{ color: "blue" }}
+                activestyle={{ color: "blue" }}
               >
                 Početna
               </Link>
@@ -85,7 +85,7 @@ export const Register = (props) => {
                   color: "#000",
                   transition: "color 0.3s",
                 }}
-                activeStyle={{ color: "blue" }}
+                activestyle={{ color: "blue" }}
               >
                 Prijavi se
               </Link>

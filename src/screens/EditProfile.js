@@ -62,7 +62,7 @@ const EditProfile = () => {
                   color: "#000",
                   transition: "color 0.3s",
                 }}
-                activeStyle={{ color: "blue" }}
+                activestyle={{ color: "blue" }}
               >
                 Početna
               </Link>
@@ -75,7 +75,7 @@ const EditProfile = () => {
                   color: "#000",
                   transition: "color 0.3s",
                 }}
-                activeStyle={{ color: "blue" }}
+                activestyle={{ color: "blue" }}
               >
                 Profil
               </Link>
@@ -89,7 +89,7 @@ const EditProfile = () => {
                   fontWeight: "bold",
                   transition: "color 0.3s",
                 }}
-                activeStyle={{ color: "blue" }}
+                activestyle={{ color: "blue" }}
               >
                 Statistika
               </Link>
@@ -102,7 +102,7 @@ const EditProfile = () => {
                   color: "#000",
                   transition: "color 0.3s",
                 }}
-                activeStyle={{ color: "blue" }}
+                activestyle={{ color: "blue" }}
               >
                 ODJAVA
               </Link>

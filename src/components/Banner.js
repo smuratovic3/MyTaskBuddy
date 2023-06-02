@@ -72,7 +72,7 @@ export const Banner = () => {
                     {`Zdravo! Ja sam aplikacija koja`}{" "}
                     <span
                       className="txt-rotate"
-                      dataPeriod="1000"
+                      dataperiod="1000"
                       data-rotate='[ "olakšava", "pomaže", "organizuje" ]'
                     >
                       <span className="wrap">{text}</span>

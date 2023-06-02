@@ -20,7 +20,7 @@ function HomePage() {
     <React.Fragment>
       {showEventModal && <EventModal />}
 
-      <div className="h-screen flex flex-col">
+      <div className=" flex flex-col">
         <MenuBarHP /> {/* Add the MenuBarHP component here */}
         <CalendarHeader />
         <div className="flex flex-1">
