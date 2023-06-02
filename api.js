@@ -55,6 +55,32 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/register", async (req, res) => {
+  const firstname = req.body.firstname;
+  const lastname = req.body.lastname;
+  const email = req.body.email;
+  const password = req.body.password;
+
+  const query = `
+    INSERT INTO parents (firstname,lastname,email,password)
+    VALUES ($1, $2, $3, $4)
+    RETURNING id;
+  `;
+
+  const values = [firstname, lastname, email, password];
+
+  try {
+    const result = await client.query(query, values);
+    const parentId = result.rows[0].id;
+    res
+      .status(200)
+      .json({ message: "Registration successful!", parentId: parentId });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "An error occurred" });
+  }
+});
+
 app.listen(8000, () => {
   console.log("Sever is now listening at port 8000");
 });

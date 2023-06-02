@@ -2,23 +2,49 @@ import React, { useState } from "react";
 import "../css/register.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const Register = (props) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  const [name, setName] = useState("");
-  const [isTeacher, setIsTeacher] = useState(false); // State for the teacher checkbox
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastName] = useState("");
   const navigate = useNavigate();
+  const [message, setMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email);
+    try {
+      console.log("Prije responsa");
+      const response = await axios.post("http://localhost:8000/register", {
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        password: pass,
+      });
+      console.log("Response", response);
+
+      if (response.status === 200) {
+        const parentId = response.data.parentId;
+        setMessage("");
+
+        navigate("/homepage");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        // Invalid username or password
+        setMessage("Nevalidan e-mail ili lozinka");
+      } else {
+        // Other errors
+        setMessage("Greška");
+      }
+    }
   };
 
-  const navigateToHomePage = () => {
+  /* const navigateToHomePage = () => {
     navigate("/homepage");
   };
-
+*/
   return (
     <>
       <form>
@@ -98,19 +124,19 @@ export const Register = (props) => {
         <form className="register-form" onSubmit={handleSubmit}>
           <label htmlFor="name">Ime</label>
           <input
-            value={name}
-            name="name"
-            onChange={(e) => setName(e.target.value)}
-            id="name"
+            value={firstname}
+            name="firstname"
+            onChange={(e) => setFirstname(e.target.value)}
+            id="firstname"
             placeholder="Ime"
             style={{ color: "black" }} // Set text color to black
           />
-          <label htmlFor="surname">Prezime</label>
+          <label htmlFor="lastname">Prezime</label>
           <input
-            value={name}
-            name="surname"
-            onChange={(e) => setName(e.target.value)}
-            id="surname"
+            value={lastname}
+            name="lastname"
+            onChange={(e) => setLastName(e.target.value)}
+            id="lastname"
             placeholder="Prezime"
             style={{ color: "black" }} // Set text color to black
           />
@@ -134,22 +160,10 @@ export const Register = (props) => {
             name="password"
             style={{ color: "black" }} // Set text color to black
           />
-          <div className="teacher-checkbox">
-            <input
-              type="checkbox"
-              id="teacher"
-              name="teacher"
-              checked={isTeacher}
-              onChange={(e) => setIsTeacher(e.target.checked)}
-            />
-            <label htmlFor="teacher">Registruj se kao nastavnik</label>
-          </div>
+
+          {message ? <p className="message">{message}</p> : null}
           <div className="containerRegistr">
-            <button
-              onClick={navigateToHomePage}
-              type="submit"
-              className="registr-button"
-            >
+            <button type="submit" className="registr-button">
               Registruj se
             </button>
           </div>
