@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import GlobalContext from "../context/GlobalContext";
+import axios from "axios";
 
 const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
 
@@ -29,9 +30,8 @@ function EventModal() {
   const [location, setLocation] = useState(
     selectedEvent ? selectedEvent.location : ""
   );
-  const [priority, setPriority] = useState(
-    selectedEvent ? selectedEvent.priority : ""
-  );
+  const [priority, setPriority] = useState();
+
   const bosnianMonthNames = [
     "Januar",
     "Februar",
@@ -67,6 +67,7 @@ function EventModal() {
       subtasks,
       label: selectedLabel,
       day: daySelected.valueOf(),
+      date: daySelected.format("DD MMMM YYYY"),
       startTime,
       endTime,
       location,
@@ -77,6 +78,28 @@ function EventModal() {
     } else {
       dispatchCalEvent({ type: "push", payload: calendarEvent });
     }
+    console.log(calendarEvent);
+
+    let priorityValue = isImportantTask === "high" ? 1 : 0;
+
+    // Send data to the endpoint
+    axios
+      .post("http://localhost:8000/tasks", {
+        activity: title,
+        date: daySelected.format("DD MMMM YYYY"),
+        startTime: startTime,
+        endTime: endTime,
+        location: location,
+        priority: priorityValue,
+      })
+      .then((response) => {
+        // Handle success
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error);
+      });
 
     setShowEventModal(false);
   }
@@ -154,9 +177,9 @@ function EventModal() {
                 priority_high
               </span>
               <select
-                value={priority}
+                value={isImportantTask}
                 className="w-full border border-gray-300 rounded text-black"
-                onChange={(e) => setPriority(e.target.value)}
+                onChange={(e) => setIsImportantTask(e.target.value)}
               >
                 <option value="">Prioritet zadataka</option>
                 <option value="high">Visok</option>

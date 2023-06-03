@@ -81,6 +81,22 @@ app.post("/register", async (req, res) => {
   }
 });
 
+app.post("/tasks", async (req, res) => {
+  const { activity, date, startTime, endTime, location, priority } = req.body;
+
+  try {
+    const query = `INSERT INTO tasks (activity, date, "startTime", "endTime", location, priority, progress, status)
+                   VALUES ($1, $2, $3, $4, $5, $6, 0, 0)`;
+    const values = [activity, date, startTime, endTime, location, priority];
+
+    await client.query(query, values);
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+
 app.listen(8000, () => {
   console.log("Sever is now listening at port 8000");
 });
