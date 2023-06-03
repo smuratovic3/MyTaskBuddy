@@ -161,6 +161,66 @@ app.post("/tasks/delete", async (req, res) => {
     });
 });
 
+app.post("/substeps", async (req, res) => {
+  const {
+    stepName,
+    description,
+    activity,
+    date,
+    startTime,
+    endTime,
+    location,
+    priority,
+    username,
+  } = req.body;
+
+  // Search for userId based on the provided username
+  const userQuery = "SELECT id FROM users WHERE username = $1";
+  const userValues = [username];
+  const userResult = await client.query(userQuery, userValues);
+
+  // Check if the user with the given username exists
+  if (userResult.rowCount === 0) {
+    res.status(404).send("User not found");
+    return;
+  }
+
+  const userId = userResult.rows[0].id;
+  // Get the id from the tasks table based on the provided criteria
+  const taskIdQuery = `SELECT id
+   FROM tasks
+   WHERE activity = $1
+     AND date = $2
+     AND "startTime" = $3
+     AND "endTime" = $4
+     AND location = $5
+     AND priority = $6
+     AND "userId" = $7`;
+  const taskIdValues = [
+    activity,
+    date,
+    startTime,
+    endTime,
+    location,
+    priority,
+    userId,
+  ];
+
+  const taskIdResult = await client.query(taskIdQuery, taskIdValues);
+  const taskId = taskIdResult.rows[0].id;
+  try {
+    const query = `INSERT INTO substeps ("stepName", description, "taskId", status)
+                   VALUES ($1, $2, $3, 0)`;
+    const values = [stepName, description, taskId];
+
+    await client.query(query, values);
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+
 app.listen(8000, () => {
   console.log("Sever is now listening at port 8000");
 });
