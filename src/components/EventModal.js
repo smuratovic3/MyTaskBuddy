@@ -184,7 +184,14 @@ function EventModal() {
                 >
                   delete
                 </span>
-                <span className="text-black">Obriši zadatak</span>
+                <span
+                  className="text-black"
+                  onClick={() => {
+                    handleDeleteTask();
+                  }}
+                >
+                  Obriši zadatak
+                </span>
               </div>
             )}
           </div>
