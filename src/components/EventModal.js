@@ -34,6 +34,8 @@ function EventModal() {
     selectedEvent ? selectedEvent.username : ""
   );
 
+  const [task_id, setTaskId] = useState();
+
   const bosnianMonthNames = [
     "Januar",
     "Februar",
@@ -85,52 +87,76 @@ function EventModal() {
 
     let priorityValue = isImportantTask === "high" ? 1 : 0;
 
-    // Send data to the endpoint for tasks
-    axios
-      .post("http://localhost:8000/tasks", {
-        activity: title,
-        date: daySelected.format("DD MMMM YYYY"),
-        startTime: startTime,
-        endTime: endTime,
-        location: location,
-        priority: priorityValue,
-        username: username,
-      })
-      .then((response) => {
-        // Handle success
-        console.log(response.data);
+    if (selectedEvent) {
+      // Update tasks database
+      axios
+        .put(`http://localhost:8000/tasks/update`, {
+          activity: title,
+          date: daySelected.format("DD MMMM YYYY"),
+          startTime: startTime,
+          endTime: endTime,
+          location: location,
+          priority: priorityValue,
+          username: username,
+          taskId: task_id,
+        })
+        .then((response) => {
+          // Handle success
+          console.log(response.data);
+        })
+        .catch((error) => {
+          // Handle error
+          console.error(error);
+        });
+      setShowEventModal(false);
+    } else {
+      // Send data to the endpoint for tasks
+      axios
+        .post("http://localhost:8000/tasks", {
+          activity: title,
+          date: daySelected.format("DD MMMM YYYY"),
+          startTime: startTime,
+          endTime: endTime,
+          location: location,
+          priority: priorityValue,
+          username: username,
+        })
+        .then((response) => {
+          // Handle success
+          console.log(response.data);
 
-        // Insert subtasks into the substeps table
-        const subtasksPromises = subtasks.map((subtask) => {
-          return axios.post("http://localhost:8000/substeps", {
-            stepName: subtask.name,
-            description: subtask.description,
-            activity: title,
-            date: daySelected.format("DD MMMM YYYY"),
-            startTime: startTime,
-            endTime: endTime,
-            location: location,
-            priority: priorityValue,
-            username: username,
+          // Insert subtasks into the substeps table
+          const subtasksPromises = subtasks.map((subtask) => {
+            return axios.post("http://localhost:8000/substeps", {
+              stepName: subtask.name,
+              description: subtask.description,
+              activity: title,
+              date: daySelected.format("DD MMMM YYYY"),
+              startTime: startTime,
+              endTime: endTime,
+              location: location,
+              priority: priorityValue,
+              username: username,
+            });
           });
+
+          Promise.all(subtasksPromises)
+            .then((subtasksResponses) => {
+              // Handle success
+              console.log(subtasksResponses);
+            })
+            .catch((error) => {
+              // Handle error
+              console.error(error);
+            });
+        })
+        .catch((error) => {
+          // Handle error
+          console.error(error);
         });
 
-        Promise.all(subtasksPromises)
-          .then((subtasksResponses) => {
-            // Handle success
-            console.log(subtasksResponses);
-          })
-          .catch((error) => {
-            // Handle error
-            console.error(error);
-          });
-      })
-      .catch((error) => {
-        // Handle error
-        console.error(error);
-      });
-
-    setShowEventModal(false);
+      setShowEventModal(false);
+    }
   }
 
   function handleDeleteTask(e) {
@@ -184,6 +210,28 @@ function EventModal() {
         setShowEventModal(false);
       }
     };
+    if (selectedEvent) {
+      let priorityValue = isImportantTask === "high" ? 1 : 0;
+      axios
+        .post(`http://localhost:8000/tasks/getId`, {
+          activity: title,
+          date: daySelected.format("DD MMMM YYYY"),
+          startTime: startTime,
+          endTime: endTime,
+          location: location,
+          priority: priorityValue,
+          username: username,
+        })
+        .then((response) => {
+          // Handle success
+          setTaskId(response.data.taskId);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          // Handle error
+          console.error(error);
+        });
+    }
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {

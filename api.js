@@ -161,6 +161,98 @@ app.post("/tasks/delete", async (req, res) => {
     });
 });
 
+// PUT request to update a specific task
+app.put("/tasks/update", async (req, res) => {
+  const {
+    activity,
+    date,
+    startTime,
+    endTime,
+    location,
+    priority,
+    username,
+    taskId,
+  } = req.body;
+  // Search for userId based on the provided username
+  const userQuery = "SELECT id FROM users WHERE username = $1";
+  const userValues = [username];
+  const userResult = await client.query(userQuery, userValues);
+
+  // Check if the user with the given username exists
+  if (userResult.rowCount === 0) {
+    res.status(404).send("User not found");
+    return;
+  }
+
+  const userId = userResult.rows[0].id;
+  try {
+    await client.query(
+      `
+    UPDATE tasks
+    SET activity = $1, date = $2, "startTime" = $3, "endTime" = $4, location = $5, priority = $6, "userId" = $7
+    WHERE id = $8
+  `,
+      [activity, date, startTime, endTime, location, priority, userId, taskId]
+    );
+
+    return res.json({ message: "Task updated successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to update task" });
+  }
+});
+
+app.post("/tasks/getId", async (req, res) => {
+  const { activity, date, startTime, endTime, location, priority, username } =
+    req.body;
+  console.log(req.body);
+  // Search for userId based on the provided username
+  const userQuery = "SELECT id FROM users WHERE username = $1";
+  const userValues = [username];
+  const userResult = await client.query(userQuery, userValues);
+
+  // Check if the user with the given username exists
+  if (userResult.rowCount === 0) {
+    res.status(404).send("User not found");
+    return;
+  }
+
+  const userId = userResult.rows[0].id;
+  // Get the id from the tasks table based on the provided criteria
+  const taskIdQuery = `SELECT id
+ FROM tasks
+ WHERE activity = $1
+   AND date = $2
+   AND "startTime" = $3
+   AND "endTime" = $4
+   AND location = $5
+   AND priority = $6
+   AND "userId" = $7`;
+  const taskIdValues = [
+    activity,
+    date,
+    startTime,
+    endTime,
+    location,
+    priority,
+    userId,
+  ];
+  try {
+    const taskIdResult = await client.query(taskIdQuery, taskIdValues);
+
+    if (taskIdResult.rows.length === 0) {
+      res.status(404).send("Task not found");
+      return;
+    }
+
+    const taskId = taskIdResult.rows[0].id;
+    return res.json({ taskId });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to get task ID" });
+  }
+});
+
 app.post("/substeps", async (req, res) => {
   const {
     stepName,
