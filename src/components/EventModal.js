@@ -30,7 +30,9 @@ function EventModal() {
   const [location, setLocation] = useState(
     selectedEvent ? selectedEvent.location : ""
   );
-  const [priority, setPriority] = useState();
+  const [username, setUsername] = useState(
+    selectedEvent ? selectedEvent.username : ""
+  );
 
   const bosnianMonthNames = [
     "Januar",
@@ -72,6 +74,7 @@ function EventModal() {
       endTime,
       location,
       id: selectedEvent ? selectedEvent.id : Date.now(),
+      username,
     };
     if (selectedEvent) {
       dispatchCalEvent({ type: "update", payload: calendarEvent });
@@ -91,6 +94,7 @@ function EventModal() {
         endTime: endTime,
         location: location,
         priority: priorityValue,
+        username: username,
       })
       .then((response) => {
         // Handle success
@@ -254,12 +258,17 @@ function EventModal() {
                   htmlFor="assignee"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Zadatak dodjeljujete:
+                  Unesite username korisnika kojem želite dodijeliti zadatak:
                 </label>
                 <input
                   type="text"
+                  id="username"
+                  name="username"
+                  value={username}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black"
                   readOnly={false}
+                  required
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
 

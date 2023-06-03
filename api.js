@@ -82,12 +82,34 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/tasks", async (req, res) => {
-  const { activity, date, startTime, endTime, location, priority } = req.body;
+  const { activity, date, startTime, endTime, location, priority, username } =
+    req.body;
 
   try {
-    const query = `INSERT INTO tasks (activity, date, "startTime", "endTime", location, priority, progress, status)
-                   VALUES ($1, $2, $3, $4, $5, $6, 0, 0)`;
-    const values = [activity, date, startTime, endTime, location, priority];
+    // Search for userId based on the provided username
+    const userQuery = "SELECT id FROM users WHERE username = $1";
+    const userValues = [username];
+    const userResult = await client.query(userQuery, userValues);
+
+    // Check if the user with the given username exists
+    if (userResult.rowCount === 0) {
+      res.status(404).send("User not found");
+      return;
+    }
+
+    const userId = userResult.rows[0].id;
+
+    const query = `INSERT INTO tasks (activity, date, "startTime", "endTime", location, priority, progress, status, "userId")
+                   VALUES ($1, $2, $3, $4, $5, $6, 0, 0, $7)`;
+    const values = [
+      activity,
+      date,
+      startTime,
+      endTime,
+      location,
+      priority,
+      userId,
+    ];
 
     await client.query(query, values);
     res.sendStatus(200);
