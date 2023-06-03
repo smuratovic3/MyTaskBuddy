@@ -107,6 +107,34 @@ function EventModal() {
 
     setShowEventModal(false);
   }
+  function handleDeleteTask(e) {
+    //  e.preventDefault();
+    dispatchCalEvent({
+      type: "delete",
+      payload: selectedEvent,
+    });
+    let priorityValue = isImportantTask === "high" ? 1 : 0;
+    // Send data to the endpoint
+    axios
+      .post("http://localhost:8000/tasks/delete", {
+        activity: title,
+        date: daySelected.format("DD MMMM YYYY"),
+        startTime: startTime,
+        endTime: endTime,
+        location: location,
+        priority: priorityValue,
+        username: username,
+      })
+      .then((response) => {
+        // Handle success
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error);
+      });
+    setShowEventModal(false);
+  }
 
   function handleSubtasksChange(index, updatedSubtask) {
     const updatedSubtasks = [...subtasks];
@@ -150,11 +178,7 @@ function EventModal() {
               <div className="flex items-center">
                 <span
                   onClick={() => {
-                    dispatchCalEvent({
-                      type: "delete",
-                      payload: selectedEvent,
-                    });
-                    setShowEventModal(false);
+                    handleDeleteTask();
                   }}
                   className="material-icons-outlined text-gray-400 cursor-pointer mr-2"
                 >

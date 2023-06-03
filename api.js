@@ -119,6 +119,48 @@ app.post("/tasks", async (req, res) => {
   }
 });
 
+// Define the endpoint for deleting a task
+app.post("/tasks/delete", async (req, res) => {
+  const { activity, date, startTime, endTime, location, priority, username } =
+    req.body;
+
+  // Search for userId based on the provided username
+  const userQuery = "SELECT id FROM users WHERE username = $1";
+  const userValues = [username];
+  const userResult = await client.query(userQuery, userValues);
+
+  // Check if the user with the given username exists
+  if (userResult.rowCount === 0) {
+    res.status(404).send("User not found");
+    return;
+  }
+
+  const userId = userResult.rows[0].id;
+
+  // Perform the deletion logic here
+  const deleteQuery =
+    'DELETE FROM tasks WHERE activity = $1 AND date = $2 AND "startTime" = $3 AND "endTime" = $4 AND location = $5 AND priority = $6 AND "userId" = $7';
+  const values = [
+    activity,
+    date,
+    startTime,
+    endTime,
+    location,
+    priority,
+    userId,
+  ];
+
+  client
+    .query(deleteQuery, values)
+    .then((result) => {
+      res.status(200).send("Task deleted successfully");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Error occurred while deleting the task");
+    });
+});
+
 app.listen(8000, () => {
   console.log("Sever is now listening at port 8000");
 });
