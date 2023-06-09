@@ -23,6 +23,7 @@ export const Login = (props) => {
       if (response.status === 200) {
         // Extract the parent ID from the response
         const parentId = response.data.parentId;
+        localStorage.setItem("parentId", parentId);
         setMessage("");
 
         navigate("/homepage");

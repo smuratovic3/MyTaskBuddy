@@ -1,13 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const EditProfile = () => {
-  const [firstName, setFirstName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
+
+  const parentId = localStorage.getItem("parentId"); // Assuming you have the parentId available
+
+  useEffect(() => {
+    // Fetch user data using parentId and update the state
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/parents/${parentId}`
+        ); // Replace with your actual API endpoint
+        const userData = await response.json();
+        console.log(userData);
+        setFirstName(userData.firstname);
+        setLastName(userData.lastname);
+        setEmail(userData.email);
+      } catch (error) {
+        console.error("Error retrieving user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [parentId]);
+
+  const handleSaveChanges = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/parents/${parentId}`,
+        {
+          email: newEmail,
+          password: newPassword,
+        }
+      );
+      console.log(response.data);
+      setEmail(newEmail);
+      setNewEmail("");
+      setNewPassword("");
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
 
   return (
     <>
@@ -133,41 +174,16 @@ const EditProfile = () => {
                   className="mt-3 font-weight-bold profile-name"
                   style={{ color: "black" }}
                 >
-                  Semina
+                  {firstname} {lastname}
                 </h4>
 
-                <span className="text-black-50 profile-email">
-                  semina1@mail.com
-                </span>
+                <span className="text-black-50 profile-email">{email}</span>
               </div>
             </div>
             <div className="col-md-8">
               <div className="p-4">
                 <h4 className="text-right profile-title">Postavke profila</h4>
-                <div className="row mt-4">
-                  <div className="col-md-6">
-                    <label className="labels">Ime</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Ime"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      style={{ color: "black" }}
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="labels">Prezime</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Prezime"
-                      value={surname}
-                      onChange={(e) => setSurname(e.target.value)}
-                      style={{ color: "black" }}
-                    />
-                  </div>
-                </div>
+                <div className="row mt-4"></div>
 
                 <div className="row mt-3">
                   <div className="col-md-12">
@@ -199,6 +215,7 @@ const EditProfile = () => {
                   <button
                     className="btn btn-primary profile-button"
                     type="button"
+                    onClick={handleSaveChanges}
                   >
                     Sačuvaj promjene
                   </button>

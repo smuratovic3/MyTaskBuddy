@@ -325,6 +325,43 @@ app.get("/get-tasks", (req, res) => {
   });
 });
 
+app.get("/parents/:parentId", async (req, res) => {
+  const parentId = req.params.parentId;
+  try {
+    const query =
+      "SELECT firstname, lastname, email FROM parents WHERE id = $1";
+    const values = [parentId];
+    const result = await client.query(query, values);
+    const userData = result.rows[0];
+
+    res.json(userData);
+  } catch (error) {
+    console.error("Error retrieving user data:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+// PUT route to update parent's email and password
+app.put("/parents/:parentId", async (req, res) => {
+  const parentId = req.params.parentId;
+  const { email, password } = req.body;
+
+  const query = `
+    UPDATE parents
+    SET email = $1, password = $2
+    WHERE id = $3
+  `;
+
+  const values = [email, password, parentId];
+
+  try {
+    await client.query(query, values);
+    res.status(200).json({ message: "Profile updated successfully!" });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ error: "Failed to update profile" });
+  }
+});
+
 app.listen(8000, () => {
   console.log("Sever is now listening at port 8000");
 });
