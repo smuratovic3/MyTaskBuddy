@@ -1,9 +1,63 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 class Statistics extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+    };
+  }
+
+  componentDidMount() {
+    this.fetchTasks();
+  }
+
+  fetchTasks = () => {
+    axios
+      .get("http://localhost:8000/get-tasks")
+      .then((response) => {
+        console.log(response.data);
+        this.setState({ data: response.data });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  calculateAverageDuration = (activityName) => {
+    const { data } = this.state;
+    const filteredData = data.filter(
+      (activity) => activity.activity === activityName
+    );
+
+    if (filteredData.length === 0) {
+      return "N/A";
+    }
+
+    const totalDuration = filteredData.reduce((sum, activity) => {
+      const startTime = new Date(activity.userStartTime);
+      const endTime = new Date(activity.userEndTime);
+      const duration = endTime - startTime;
+      return sum + duration;
+    }, 0);
+
+    const averageDuration = totalDuration / filteredData.length;
+    const averageHours = Math.floor(averageDuration / 3600000);
+    const averageMinutes = Math.floor((averageDuration % 3600000) / 60000);
+
+    return `${averageHours}h ${averageMinutes}m`;
+  };
+
   render() {
-    const { data } = this.props;
+    const { data } = this.state;
+
+    const filteredData = data.filter(
+      (activity, index, self) =>
+        activity.status === 2 &&
+        index === self.findIndex((a) => a.activity === activity.activity)
+    );
 
     return (
       <form>
@@ -131,70 +185,75 @@ class Statistics extends React.Component {
                   margin: "0 auto",
                   width: "100%",
                   backgroundColor: "#fff",
+                  fontSize: "14px", // Adjust the font size
+                  color: "#000", // Set the text color to black
                 }}
               >
                 <thead>
-                  <tr
-                    style={{
-                      backgroundColor: "#a4afb9",
-                      color: "#fff",
-                    }}
-                  >
-                    <th style={{ padding: "8px", color: "black" }}>
+                  <tr>
+                    <th
+                      style={{
+                        padding: "10px",
+                        color: "black",
+                        borderBottom: "2px solid #000", // Add a thicker bottom border
+                        textAlign: "left",
+                      }}
+                    >
                       Aktivnosti
                     </th>
-                    <th style={{ padding: "8px", color: "black" }}>
-                      Vrijeme početka
+
+                    <th
+                      style={{
+                        padding: "10px",
+                        color: "black",
+                        borderBottom: "2px solid #000", // Add a thicker bottom border
+                        textAlign: "left",
+                      }}
+                    >
+                      Mjesto
                     </th>
-                    <th style={{ padding: "8px", color: "black" }}>
-                      Vrijeme završetka
-                    </th>
-                    <th style={{ padding: "8px", color: "black" }}>Mjesto</th>
-                    <th style={{ padding: "8px", color: "black" }}>
+                    <th
+                      style={{
+                        padding: "10px",
+                        color: "black",
+                        borderBottom: "2px solid #000", // Add a thicker bottom border
+                        textAlign: "left",
+                      }}
+                    >
                       Prosječno trajanje
-                    </th>
-                    <th style={{ padding: "8px", color: "black" }}>
-                      Završena aktivnost
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data &&
-                    data.length > 0 &&
-                    data.map((activity, index) => (
-                      <tr key={index}>
-                        <td
-                          style={{ border: "1px solid black", padding: "8px" }}
-                        >
-                          {activity.col1}
-                        </td>
-                        <td
-                          style={{ border: "1px solid black", padding: "8px" }}
-                        >
-                          {activity.col2}
-                        </td>
-                        <td
-                          style={{ border: "1px solid black", padding: "8px" }}
-                        >
-                          {activity.col3}
-                        </td>
-                        <td
-                          style={{ border: "1px solid black", padding: "8px" }}
-                        >
-                          {activity.col4}
-                        </td>
-                        <td
-                          style={{ border: "1px solid black", padding: "8px" }}
-                        >
-                          {activity.col5}
-                        </td>
-                        <td
-                          style={{ border: "1px solid black", padding: "8px" }}
-                        >
-                          {activity.col6}
-                        </td>
-                      </tr>
-                    ))}
+                  {filteredData.map((activity, index) => (
+                    <tr key={index}>
+                      <td
+                        style={{
+                          padding: "10px",
+                          borderBottom: "1px solid #ccc",
+                        }}
+                      >
+                        {activity.activity}
+                      </td>
+
+                      <td
+                        style={{
+                          padding: "10px",
+                          borderBottom: "1px solid #ccc",
+                        }}
+                      >
+                        {activity.location}
+                      </td>
+                      <td
+                        style={{
+                          padding: "10px",
+                          borderBottom: "1px solid #ccc",
+                        }}
+                      >
+                        {this.calculateAverageDuration(activity.activity)}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

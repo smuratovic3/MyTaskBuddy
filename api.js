@@ -312,6 +312,18 @@ app.post("/substeps", async (req, res) => {
     res.sendStatus(500);
   }
 });
+app.get("/get-tasks", (req, res) => {
+  // Query the tasks table
+  client.query("SELECT * FROM tasks", (error, result) => {
+    if (error) {
+      console.error("Error executing query", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      const tasks = result.rows;
+      res.json(tasks);
+    }
+  });
+});
 
 app.listen(8000, () => {
   console.log("Sever is now listening at port 8000");
