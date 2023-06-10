@@ -149,7 +149,6 @@ class Statistics extends React.Component {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-
             padding: "50px",
             boxSizing: "border-box",
             backgroundColor: "#f8f9fa",
@@ -157,12 +156,11 @@ class Statistics extends React.Component {
         >
           <div
             style={{
-              maxWidth: "700px",
               width: "100%",
               margin: "auto",
               backgroundColor: "#fff",
               boxShadow: "0px 14px 80px rgba(34, 35, 58, 0.2)",
-              padding: "50px 25px 45px 25px",
+              padding: "100px 100px 155px 100px",
               borderRadius: "15px",
               transition: "all 0.3s",
               textAlign: "left",
@@ -177,26 +175,35 @@ class Statistics extends React.Component {
               style={{
                 marginTop: "30px",
                 overflowX: "auto",
+                maxHeight: "300px", // Add max height to enable scrolling
+                maxWidth: "900px",
               }}
             >
               <table
                 style={{
+                  borderWidth: "4px", // Specify the border width
                   borderCollapse: "collapse",
-                  margin: "0 auto",
                   width: "100%",
                   backgroundColor: "#fff",
-                  fontSize: "14px", // Adjust the font size
+                  fontSize: "20px", // Adjust the font size
                   color: "#000", // Set the text color to black
                 }}
               >
-                <thead>
+                <thead
+                  style={{
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: "#E6E6FA",
+                  }}
+                >
                   <tr>
                     <th
                       style={{
                         padding: "10px",
                         color: "black",
                         borderBottom: "2px solid #000", // Add a thicker bottom border
-                        textAlign: "left",
+                        textAlign: "center",
+                        borderWidth: "4px",
                       }}
                     >
                       Aktivnosti
@@ -207,30 +214,37 @@ class Statistics extends React.Component {
                         padding: "10px",
                         color: "black",
                         borderBottom: "2px solid #000", // Add a thicker bottom border
-                        textAlign: "left",
+                        textAlign: "center",
+                        borderWidth: "4px",
                       }}
                     >
                       Mjesto
                     </th>
                     <th
                       style={{
-                        padding: "10px",
+                        padding: "20px",
                         color: "black",
                         borderBottom: "2px solid #000", // Add a thicker bottom border
-                        textAlign: "left",
+                        textAlign: "center",
+                        borderWidth: "4px",
                       }}
                     >
                       Prosječno trajanje
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody
+                  style={{
+                    borderWidth: "4px", // Specify the border width
+                  }}
+                >
                   {filteredData.map((activity, index) => (
                     <tr key={index}>
                       <td
                         style={{
-                          padding: "10px",
+                          padding: "20px",
                           borderBottom: "1px solid #ccc",
+                          borderWidth: "4px",
                         }}
                       >
                         {activity.activity}
@@ -239,7 +253,8 @@ class Statistics extends React.Component {
                       <td
                         style={{
                           padding: "10px",
-                          borderBottom: "1px solid #ccc",
+                          borderBottom: "2px solid #ccc",
+                          borderWidth: "4px",
                         }}
                       >
                         {activity.location}
@@ -248,6 +263,7 @@ class Statistics extends React.Component {
                         style={{
                           padding: "10px",
                           borderBottom: "1px solid #ccc",
+                          borderWidth: "4px",
                         }}
                       >
                         {this.calculateAverageDuration(activity.activity)}

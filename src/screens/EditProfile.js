@@ -182,12 +182,20 @@ const EditProfile = () => {
             </div>
             <div className="col-md-8">
               <div className="p-4">
-                <h4 className="text-right profile-title">Postavke profila</h4>
+                <h4
+                  className="text-center profile-title"
+                  style={{ color: "black" }}
+                >
+                  Postavke profila
+                </h4>
+
                 <div className="row mt-4"></div>
 
                 <div className="row mt-3">
                   <div className="col-md-12">
-                    <label className="labels">Promijeni e-mail</label>
+                    <label className="labels" style={{ color: "black" }}>
+                      Promijenite e-mail
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -200,7 +208,9 @@ const EditProfile = () => {
                 </div>
                 <div className="row mt-3">
                   <div className="col-md-12">
-                    <label className="labels">Promijenite lozinku</label>
+                    <label className="labels" style={{ color: "black" }}>
+                      Promijenite lozinku
+                    </label>
                     <input
                       type="password"
                       className="form-control"
