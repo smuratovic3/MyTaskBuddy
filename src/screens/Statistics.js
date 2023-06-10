@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import MenuBarHP from "../components/MenuBarHP";
 
 class Statistics extends React.Component {
   constructor(props) {
@@ -61,89 +61,7 @@ class Statistics extends React.Component {
 
     return (
       <form>
-        <nav
-          style={{
-            backgroundColor: "#f8f9fa",
-            padding: "10px 20px",
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Link
-            to={"/homepage"}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              textDecoration: "none",
-              color: "#000",
-            }}
-          >
-            <img
-              src="/assets/images/logo.png"
-              alt="MyTaskBuddy Logo"
-              width="30"
-              height="30"
-              style={{ marginRight: "10px" }}
-            />
-            <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-              MyTaskBuddy
-            </span>
-          </Link>
-
-          <ul
-            style={{
-              display: "flex",
-              listStyle: "none",
-              margin: 0,
-              padding: 0,
-            }}
-          >
-            <li style={{ marginRight: "35px" }}>
-              <Link
-                to={"/homepage"}
-                style={{ textDecoration: "none", color: "#000" }}
-              >
-                Početna
-              </Link>
-            </li>
-            <li style={{ marginRight: "35px" }}>
-              <Link
-                to={"/editprofile"}
-                style={{ textDecoration: "none", color: "#000" }}
-              >
-                Profil
-              </Link>
-            </li>
-            <li style={{ marginRight: "35px" }}>
-              <Link
-                to={"/statistics"}
-                style={{
-                  textDecoration: "none",
-                  color: "#000",
-                  fontWeight: "bold",
-                }}
-              >
-                Statistika
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={"/login"}
-                style={{
-                  textDecoration: "none",
-                  color: "#000",
-                }}
-              >
-                ODJAVA
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        <MenuBarHP /> {/* Add the MenuBarHP component here */}
         <div
           style={{
             display: "flex",
