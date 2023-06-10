@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import "../index.css";
 import { getMonth } from "../util";
 import CalendarHeader from "../components/CalendarHeader";
@@ -12,7 +11,6 @@ import MenuBarHP from "../components/MenuBarHP";
 function HomePage() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
   const { monthIndex, showEventModal } = useContext(GlobalContext);
-  const navigate = useNavigate();
 
   useEffect(() => {
     setCurrentMonth(getMonth(monthIndex));

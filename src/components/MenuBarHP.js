@@ -12,11 +12,6 @@ const MenuBar = () => {
     setHoveredLink(null);
   };
 
-  const handleLogout = () => {
-    // Clear session or authentication data
-    // Perform any additional logout actions
-  };
-
   const getLinkStyle = (index) => {
     const baseStyle = {
       textDecoration: "none",
@@ -113,7 +108,6 @@ const MenuBar = () => {
             style={getLinkStyle(3)}
             onMouseEnter={() => handleHover(3)}
             onMouseLeave={handleLeave}
-            onClick={handleLogout}
           >
             ODJAVA
           </Link>
