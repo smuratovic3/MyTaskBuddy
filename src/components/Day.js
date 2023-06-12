@@ -12,11 +12,31 @@ function Day({ day, rowIdx }) {
   } = useContext(GlobalContext);
 
   useEffect(() => {
-    const events = filteredEvents.filter(
-      (evt) => dayjs(evt.day).format("DD-MM-YY") === day.format("DD-MM-YY")
-    );
-    setDayEvents(events);
-  }, [filteredEvents, day]);
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/tasks?parentId=${localStorage.getItem(
+            "parentId"
+          )}`
+        );
+        if (response.ok) {
+          const tasks = await response.json();
+          const events = tasks.filter(
+            (task) =>
+              dayjs(task.date).format("YYYY-MM-DD") === day.format("YYYY-MM-DD")
+          );
+
+          setDayEvents(events);
+        } else {
+          throw new Error("Failed to fetch tasks");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchTasks();
+  }, [day, dayEvents]);
 
   function getCurrentDayClass() {
     const isCurrentDay = day.format("DD-MM-YY") === dayjs().format("DD-MM-YY");
@@ -44,17 +64,21 @@ function Day({ day, rowIdx }) {
       <div
         className="flex-1 cursor-pointer"
         onClick={() => {
+          console.log("day", day);
           setDaySelected(day);
           setShowEventModal(true);
         }}
       >
         {dayEvents.map((evt, idx) => (
           <div
-            key={idx}
-            onClick={() => setSelectedEvent(evt)}
+            key={evt.id}
+            onClick={() => {
+              console.log("evt", evt);
+              setSelectedEvent(evt);
+            }}
             className={`bg-${evt.label}-200 p-1 mr-3 text-black text-sm font-bold rounded mb-1 truncate`}
           >
-            {evt.title}
+            {evt.activity}
           </div>
         ))}
       </div>

@@ -1,6 +1,10 @@
-const { Client } = require("pg");
+const pg = require("pg");
 
-const client = new Client({
+pg.types.setTypeParser(1082, function (stringValue) {
+  return stringValue;
+});
+
+const client = new pg.Client({
   host: "localhost",
   user: "postgres",
   port: 5432,

@@ -11,10 +11,28 @@ import MenuBarHP from "../components/MenuBarHP";
 function HomePage() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
   const { monthIndex, showEventModal } = useContext(GlobalContext);
+  const [isPristine, setIsPristine] = useState(true);
+
+  useEffect(() => {
+    try {
+      const parentId = localStorage.getItem("parentId");
+      if (!parentId) {
+        window.location.replace("/");
+      } else {
+        setIsPristine(false);
+      }
+    } catch (err) {
+      window.location.replace("/");
+    }
+  });
 
   useEffect(() => {
     setCurrentMonth(getMonth(monthIndex));
   }, [monthIndex]);
+
+  if (isPristine) {
+    return null;
+  }
 
   return (
     <React.Fragment>

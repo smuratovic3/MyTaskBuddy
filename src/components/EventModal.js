@@ -1,21 +1,24 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import GlobalContext from "../context/GlobalContext";
 import axios from "axios";
+import moment from "moment";
 
 const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
+const parentId = localStorage.getItem("parentId");
 
 function EventModal() {
   const { setShowEventModal, daySelected, dispatchCalEvent, selectedEvent } =
     useContext(GlobalContext);
 
   const modalRef = useRef(null); // Create a ref for the modal container
-  const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : "");
+  const [title, setTitle] = useState(
+    selectedEvent ? selectedEvent.activity : ""
+  );
   const [isImportantTask, setIsImportantTask] = useState(
-    selectedEvent ? selectedEvent.isImportantTask : false
+    selectedEvent && selectedEvent.priority === 1 ? "high" : ""
   );
-  const [subtasks, setSubtasks] = useState(
-    selectedEvent ? selectedEvent.subtasks : []
-  );
+  const [subtasks, setSubtasks] = useState([]);
+
   const [selectedLabel, setSelectedLabel] = useState(
     selectedEvent
       ? labelsClasses.find((lbl) => lbl === selectedEvent.label)
@@ -30,11 +33,9 @@ function EventModal() {
   const [location, setLocation] = useState(
     selectedEvent ? selectedEvent.location : ""
   );
-  const [username, setUsername] = useState(
-    selectedEvent ? selectedEvent.username : ""
-  );
+  const [username, setUsername] = useState("");
 
-  const [task_id, setTaskId] = useState();
+  const [task_id, setTaskId] = useState(selectedEvent ? selectedEvent.id : "");
 
   const bosnianMonthNames = [
     "Januar",
@@ -64,6 +65,7 @@ function EventModal() {
     return bosnianDaysOfWeek[day];
   }
   function handleSubmit(e) {
+    console.log(daySelected);
     e.preventDefault();
     const calendarEvent = {
       title,
@@ -71,7 +73,7 @@ function EventModal() {
       subtasks,
       label: selectedLabel,
       day: daySelected.valueOf(),
-      date: daySelected.format("DD MMMM YYYY"),
+      date: daySelected.format("YYYY-MM-DD"),
       startTime,
       endTime,
       location,
@@ -83,7 +85,7 @@ function EventModal() {
     } else {
       dispatchCalEvent({ type: "push", payload: calendarEvent });
     }
-    console.log(calendarEvent);
+    //console.log(calendarEvent);
 
     let priorityValue = isImportantTask === "high" ? 1 : 0;
 
@@ -92,7 +94,7 @@ function EventModal() {
       axios
         .put(`http://localhost:8000/tasks/update`, {
           activity: title,
-          date: daySelected.format("DD MMMM YYYY"),
+          date: daySelected.format("YYYY-MM-DD"),
           startTime: startTime,
           endTime: endTime,
           location: location,
@@ -114,24 +116,25 @@ function EventModal() {
       axios
         .post("http://localhost:8000/tasks", {
           activity: title,
-          date: daySelected.format("DD MMMM YYYY"),
+          date: daySelected.format("YYYY-MM-DD"),
           startTime: startTime,
           endTime: endTime,
           location: location,
           priority: priorityValue,
           username: username,
+          parentId: parentId,
         })
         .then((response) => {
           // Handle success
-          console.log(response.data);
+          //console.log(response.data);
 
           // Insert subtasks into the substeps table
           const subtasksPromises = subtasks.map((subtask) => {
             return axios.post("http://localhost:8000/substeps", {
-              stepName: subtask.name,
+              stepName: subtask.stepName,
               description: subtask.description,
               activity: title,
-              date: daySelected.format("DD MMMM YYYY"),
+              date: daySelected.format("YYYY-MM-DD"),
               startTime: startTime,
               endTime: endTime,
               location: location,
@@ -143,7 +146,7 @@ function EventModal() {
           Promise.all(subtasksPromises)
             .then((subtasksResponses) => {
               // Handle success
-              console.log(subtasksResponses);
+              //console.log(subtasksResponses);
             })
             .catch((error) => {
               // Handle error
@@ -170,7 +173,7 @@ function EventModal() {
     axios
       .post("http://localhost:8000/tasks/delete", {
         activity: title,
-        date: daySelected.format("DD MMMM YYYY"),
+        date: daySelected.format("YYYY-MM-DD"),
         startTime: startTime,
         endTime: endTime,
         location: location,
@@ -195,7 +198,7 @@ function EventModal() {
   }
 
   function handleAddSubtask() {
-    setSubtasks([...subtasks, { name: "", description: "" }]);
+    setSubtasks([...subtasks, { stepName: "", description: "" }]);
   }
 
   function handleRemoveSubtask(index) {
@@ -205,32 +208,34 @@ function EventModal() {
   }
 
   useEffect(() => {
+    if (selectedEvent && selectedEvent.userId) {
+      axios
+        .get(`http://localhost:8000/users/${selectedEvent.userId}`)
+        .then((response) => {
+          setUsername(response.data.username);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      axios
+        .get(`http://localhost:8000/substeps?taskId=${selectedEvent.id}`)
+        .then((response) => {
+          setSubtasks(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [selectedEvent]);
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         setShowEventModal(false);
       }
     };
     if (selectedEvent) {
-      let priorityValue = isImportantTask === "high" ? 1 : 0;
-      axios
-        .post(`http://localhost:8000/tasks/getId`, {
-          activity: title,
-          date: daySelected.format("DD MMMM YYYY"),
-          startTime: startTime,
-          endTime: endTime,
-          location: location,
-          priority: priorityValue,
-          username: username,
-        })
-        .then((response) => {
-          // Handle success
-          setTaskId(response.data.taskId);
-          console.log(response.data);
-        })
-        .catch((error) => {
-          // Handle error
-          console.error(error);
-        });
+      console.log(selectedEvent);
     }
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -311,12 +316,12 @@ function EventModal() {
                     <input
                       type="text"
                       placeholder="Naziv podzadatka"
-                      value={subtask.name}
+                      value={subtask.stepName}
                       className="w-1/2 px-2 py-1 border border-gray-300 rounded text-black"
                       onChange={(e) =>
                         handleSubtasksChange(index, {
                           ...subtask,
-                          name: e.target.value,
+                          stepName: e.target.value,
                         })
                       }
                     />

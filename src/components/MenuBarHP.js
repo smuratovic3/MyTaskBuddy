@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const MenuBar = () => {
@@ -24,6 +24,13 @@ const MenuBar = () => {
     }
 
     return baseStyle;
+  };
+
+  const handleLogout = () => {
+    // Perform logout logic here
+    // Redirect to the login screen
+    localStorage.removeItem("parentId");
+    window.location.replace("/login");
   };
 
   return (
@@ -103,14 +110,15 @@ const MenuBar = () => {
           </Link>
         </li>
         <li>
-          <Link
-            to={"/login"}
+          <a
+            href="/login"
             style={getLinkStyle(3)}
             onMouseEnter={() => handleHover(3)}
             onMouseLeave={handleLeave}
+            onClick={handleLogout}
           >
             ODJAVA
-          </Link>
+          </a>
         </li>
       </ul>
     </nav>

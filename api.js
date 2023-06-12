@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 const app = express();
+
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -82,8 +83,16 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/tasks", async (req, res) => {
-  const { activity, date, startTime, endTime, location, priority, username } =
-    req.body;
+  const {
+    activity,
+    date,
+    startTime,
+    endTime,
+    location,
+    priority,
+    username,
+    parentId,
+  } = req.body;
 
   try {
     // Search for userId based on the provided username
@@ -98,9 +107,10 @@ app.post("/tasks", async (req, res) => {
     }
 
     const userId = userResult.rows[0].id;
+    console.log("datae", date);
 
-    const query = `INSERT INTO tasks (activity, date, "startTime", "endTime", location, priority, progress, status, "userId")
-                   VALUES ($1, $2, $3, $4, $5, $6, 0, 0, $7)`;
+    const query = `INSERT INTO tasks (activity, date, "startTime", "endTime", location, priority, progress, status, "userId", "parentId")
+                   VALUES ($1, $2, $3, $4, $5, $6, 0, 0, $7, $8)`;
     const values = [
       activity,
       date,
@@ -109,6 +119,7 @@ app.post("/tasks", async (req, res) => {
       location,
       priority,
       userId,
+      parentId,
     ];
 
     await client.query(query, values);
@@ -334,6 +345,8 @@ app.get("/parents/:parentId", async (req, res) => {
     const result = await client.query(query, values);
     const userData = result.rows[0];
 
+    console.log(user.data);
+
     res.json(userData);
   } catch (error) {
     console.error("Error retrieving user data:", error);
@@ -359,6 +372,60 @@ app.put("/parents/:parentId", async (req, res) => {
   } catch (error) {
     console.error("Error updating profile:", error);
     res.status(500).json({ error: "Failed to update profile" });
+  }
+});
+app.get("/tasks", async (req, res) => {
+  const { parentId } = req.query;
+
+  try {
+    const query = 'SELECT * FROM tasks WHERE "parentId" = $1';
+    const values = [parentId];
+
+    const result = await client.query(query, values);
+    const tasks = result.rows;
+
+    res.json(tasks);
+  } catch (error) {
+    console.error("Error executing query", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/users/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Execute a PostgreSQL query to retrieve user information
+    const query = "SELECT * FROM users WHERE id = $1";
+    const result = await client.query(query, [userId]);
+
+    // Check if user exists
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    // Return the user informations
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while processing the request." });
+  }
+});
+
+app.get("/substeps", async (req, res) => {
+  const { taskId } = req.query;
+
+  try {
+    const substeps = await client.query(
+      'SELECT * FROM substeps WHERE "taskId" = $1',
+      [taskId]
+    );
+    res.json(substeps.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

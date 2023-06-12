@@ -1,4 +1,7 @@
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
+dayjs.utc();
 
 export function getMonth(month = dayjs().month()) {
   month = Math.floor(month);
