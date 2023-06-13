@@ -1,33 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MenuBarHP from "../components/MenuBarHP";
 
-class Statistics extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-    };
-  }
+const Statistics = () => {
+  const [data, setData] = useState([]);
+  const parentId = localStorage.getItem("parentId");
 
-  componentDidMount() {
-    this.fetchTasks();
-  }
+  useEffect(() => {
+    if (!parentId) {
+      window.location.replace("/login");
+    }
+  }, [parentId]);
 
-  fetchTasks = () => {
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = () => {
     axios
       .get("http://localhost:8000/get-tasks")
       .then((response) => {
         console.log(response.data);
-        this.setState({ data: response.data });
+        setData(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  calculateAverageDuration = (activityName) => {
-    const { data } = this.state;
+  const calculateAverageDuration = (activityName) => {
     const filteredData = data.filter(
       (activity) => activity.activity === activityName
     );
@@ -50,152 +51,147 @@ class Statistics extends React.Component {
     return `${averageHours}h ${averageMinutes}m`;
   };
 
-  render() {
-    const { data } = this.state;
+  const filteredData = data.filter(
+    (activity, index, self) =>
+      activity.status === 2 &&
+      index === self.findIndex((a) => a.activity === activity.activity)
+  );
 
-    const filteredData = data.filter(
-      (activity, index, self) =>
-        activity.status === 2 &&
-        index === self.findIndex((a) => a.activity === activity.activity)
-    );
-
-    return (
-      <form>
-        <MenuBarHP /> {/* Add the MenuBarHP component here */}
+  return (
+    <form>
+      <MenuBarHP />
+      {/* Add the MenuBarHP component here */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "50px",
+          boxSizing: "border-box",
+          backgroundColor: "#f8f9fa",
+        }}
+      >
         <div
           style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "50px",
-            boxSizing: "border-box",
-            backgroundColor: "#f8f9fa",
+            width: "100%",
+            margin: "auto",
+            backgroundColor: "#fff",
+            boxShadow: "0px 14px 80px rgba(34, 35, 58, 0.2)",
+            padding: "100px 100px 155px 100px",
+            borderRadius: "15px",
+            transition: "all 0.3s",
+            textAlign: "left",
           }}
         >
+          <h1 style={{ textAlign: "center", fontSize: "30px", color: "black" }}>
+            STATISTIKA
+          </h1>
           <div
             style={{
-              width: "100%",
-              margin: "auto",
-              backgroundColor: "#fff",
-              boxShadow: "0px 14px 80px rgba(34, 35, 58, 0.2)",
-              padding: "100px 100px 155px 100px",
-              borderRadius: "15px",
-              transition: "all 0.3s",
-              textAlign: "left",
+              marginTop: "30px",
+              overflowX: "auto",
+              maxHeight: "300px", // Add max height to enable scrolling
+              maxWidth: "900px",
             }}
           >
-            <h1
-              style={{ textAlign: "center", fontSize: "30px", color: "black" }}
-            >
-              STATISTIKA
-            </h1>
-            <div
+            <table
               style={{
-                marginTop: "30px",
-                overflowX: "auto",
-                maxHeight: "300px", // Add max height to enable scrolling
-                maxWidth: "900px",
+                borderWidth: "4px", // Specify the border width
+                borderCollapse: "collapse",
+                width: "100%",
+                backgroundColor: "#fff",
+                fontSize: "20px", // Adjust the font size
+                color: "#000", // Set the text color to black
               }}
             >
-              <table
+              <thead
                 style={{
-                  borderWidth: "4px", // Specify the border width
-                  borderCollapse: "collapse",
-                  width: "100%",
-                  backgroundColor: "#fff",
-                  fontSize: "20px", // Adjust the font size
-                  color: "#000", // Set the text color to black
+                  position: "sticky",
+                  top: 0,
+                  backgroundColor: "#E6E6FA",
                 }}
               >
-                <thead
-                  style={{
-                    position: "sticky",
-                    top: 0,
-                    backgroundColor: "#E6E6FA",
-                  }}
-                >
-                  <tr>
-                    <th
-                      style={{
-                        padding: "10px",
-                        color: "black",
-                        borderBottom: "2px solid #000", // Add a thicker bottom border
-                        textAlign: "center",
-                        borderWidth: "4px",
-                      }}
-                    >
-                      Aktivnosti
-                    </th>
+                <tr>
+                  <th
+                    style={{
+                      padding: "10px",
+                      color: "black",
+                      borderBottom: "2px solid #000", // Add a thicker bottom border
+                      textAlign: "center",
+                      borderWidth: "4px",
+                    }}
+                  >
+                    Aktivnosti
+                  </th>
 
-                    <th
-                      style={{
-                        padding: "10px",
-                        color: "black",
-                        borderBottom: "2px solid #000", // Add a thicker bottom border
-                        textAlign: "center",
-                        borderWidth: "4px",
-                      }}
-                    >
-                      Mjesto
-                    </th>
-                    <th
+                  <th
+                    style={{
+                      padding: "10px",
+                      color: "black",
+                      borderBottom: "2px solid #000", // Add a thicker bottom border
+                      textAlign: "center",
+                      borderWidth: "4px",
+                    }}
+                  >
+                    Mjesto
+                  </th>
+                  <th
+                    style={{
+                      padding: "20px",
+                      color: "black",
+                      borderBottom: "2px solid #000", // Add a thicker bottom border
+                      textAlign: "center",
+                      borderWidth: "4px",
+                    }}
+                  >
+                    Prosječno trajanje
+                  </th>
+                </tr>
+              </thead>
+              <tbody
+                style={{
+                  borderWidth: "4px", // Specify the border width
+                }}
+              >
+                {filteredData.map((activity, index) => (
+                  <tr key={index}>
+                    <td
                       style={{
                         padding: "20px",
-                        color: "black",
-                        borderBottom: "2px solid #000", // Add a thicker bottom border
-                        textAlign: "center",
+                        borderBottom: "1px solid #ccc",
                         borderWidth: "4px",
                       }}
                     >
-                      Prosječno trajanje
-                    </th>
-                  </tr>
-                </thead>
-                <tbody
-                  style={{
-                    borderWidth: "4px", // Specify the border width
-                  }}
-                >
-                  {filteredData.map((activity, index) => (
-                    <tr key={index}>
-                      <td
-                        style={{
-                          padding: "20px",
-                          borderBottom: "1px solid #ccc",
-                          borderWidth: "4px",
-                        }}
-                      >
-                        {activity.activity}
-                      </td>
+                      {activity.activity}
+                    </td>
 
-                      <td
-                        style={{
-                          padding: "10px",
-                          borderBottom: "2px solid #ccc",
-                          borderWidth: "4px",
-                        }}
-                      >
-                        {activity.location}
-                      </td>
-                      <td
-                        style={{
-                          padding: "10px",
-                          borderBottom: "1px solid #ccc",
-                          borderWidth: "4px",
-                        }}
-                      >
-                        {this.calculateAverageDuration(activity.activity)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                    <td
+                      style={{
+                        padding: "10px",
+                        borderBottom: "2px solid #ccc",
+                        borderWidth: "4px",
+                      }}
+                    >
+                      {activity.location}
+                    </td>
+                    <td
+                      style={{
+                        padding: "10px",
+                        borderBottom: "1px solid #ccc",
+                        borderWidth: "4px",
+                      }}
+                    >
+                      {calculateAverageDuration(activity.activity)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-      </form>
-    );
-  }
-}
+      </div>
+    </form>
+  );
+};
 
 export default Statistics;

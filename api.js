@@ -345,7 +345,7 @@ app.get("/parents/:parentId", async (req, res) => {
     const result = await client.query(query, values);
     const userData = result.rows[0];
 
-    console.log(user.data);
+    //console.log(user.data);
 
     res.json(userData);
   } catch (error) {

@@ -15,14 +15,18 @@ const EditProfile = () => {
     // Fetch user data using parentId and update the state
     const fetchUserData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/parents/${parentId}`
-        ); // Replace with your actual API endpoint
-        const userData = await response.json();
-        console.log(userData);
-        setFirstName(userData.firstname);
-        setLastName(userData.lastname);
-        setEmail(userData.email);
+        if (!parentId) {
+          window.location.replace("/login");
+        } else {
+          const response = await fetch(
+            `http://localhost:8000/parents/${parentId}`
+          ); // Replace with your actual API endpoint
+          const userData = await response.json();
+          console.log(userData);
+          setFirstName(userData.firstname);
+          setLastName(userData.lastname);
+          setEmail(userData.email);
+        }
       } catch (error) {
         console.error("Error retrieving user data:", error);
       }
