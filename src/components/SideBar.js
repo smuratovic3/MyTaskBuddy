@@ -1,7 +1,6 @@
 import React from "react";
 import CreateEventButton from "./CreateEventButton";
 import SmallCalendar from "./SmallCalendar";
-import Labels from "./Labels";
 
 const sidebarStyle = {
   padding: "-20px",
@@ -18,7 +17,6 @@ function Sidebar() {
     <aside style={sidebarStyle}>
       <CreateEventButton />
       <SmallCalendar />
-      <Labels />
     </aside>
   );
 }

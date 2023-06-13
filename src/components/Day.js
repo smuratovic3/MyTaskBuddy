@@ -76,7 +76,7 @@ function Day({ day, rowIdx }) {
               console.log("evt", evt);
               setSelectedEvent(evt);
             }}
-            className={`bg-${evt.label}-200 p-1 mr-3 text-black text-sm font-bold rounded mb-1 truncate`}
+            className={`bg-blue-200 p-1 mr-3 text-black text-sm font-bold rounded mb-1 truncate`}
           >
             {evt.activity}
           </div>

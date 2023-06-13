@@ -1,9 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import GlobalContext from "../context/GlobalContext";
 import axios from "axios";
-import moment from "moment";
 
-const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
 const parentId = localStorage.getItem("parentId");
 
 function EventModal() {
@@ -19,11 +17,6 @@ function EventModal() {
   );
   const [subtasks, setSubtasks] = useState([]);
 
-  const [selectedLabel, setSelectedLabel] = useState(
-    selectedEvent
-      ? labelsClasses.find((lbl) => lbl === selectedEvent.label)
-      : labelsClasses[0]
-  );
   const [startTime, setStartTime] = useState(
     selectedEvent ? selectedEvent.startTime : ""
   );
@@ -71,7 +64,6 @@ function EventModal() {
       title,
       isImportantTask,
       subtasks,
-      label: selectedLabel,
       day: daySelected.valueOf(),
       date: daySelected.format("YYYY-MM-DD"),
       startTime,
@@ -431,27 +423,6 @@ function EventModal() {
                 className="w-full pb-2 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500 text-xl text-gray-600"
                 onChange={(e) => setLocation(e.target.value)}
               />
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <span className="material-icons-outlined text-gray-400 text-3xl">
-                segment
-              </span>
-              <div className="flex gap-2">
-                {labelsClasses.map((lblClass, i) => (
-                  <span
-                    key={i}
-                    onClick={() => setSelectedLabel(lblClass)}
-                    className={`w-6 h-6 rounded-full flex items-center justify-center bg-${lblClass}-500 cursor-pointer`}
-                  >
-                    {selectedLabel === lblClass && (
-                      <span className="material-icons-outlined text-white text-sm">
-                        check
-                      </span>
-                    )}
-                  </span>
-                ))}
-              </div>
             </div>
           </div>
 
