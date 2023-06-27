@@ -4,7 +4,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 const app = express();
-
+const nodemailer = require("nodemailer");
+const generatePassword = require("generate-password");
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -357,15 +358,32 @@ app.get("/parents/:parentId", async (req, res) => {
 app.put("/parents/:parentId", async (req, res) => {
   const parentId = req.params.parentId;
   const { email, password } = req.body;
+  let query = "";
+  let values = [];
 
-  const query = `
+  if (!email && password) {
+    query = `
     UPDATE parents
-    SET email = $1, password = $2
-    WHERE id = $3
+    SET  password = $1
+    WHERE id = $2
+  `;
+    values = [password, parentId];
+  } else if (!password && email) {
+    query = `
+    UPDATE parents
+    SET  email = $1
+    WHERE id = $2
   `;
 
-  const values = [email, password, parentId];
-
+    values = [password, parentId];
+  } else {
+    query = `
+    UPDATE parents
+    SET email =$1, password = $2
+    WHERE id = $3
+  `;
+    values = [email, password, parentId];
+  }
   try {
     await client.query(query, values);
     res.status(200).json({ message: "Profile updated successfully!" });
@@ -427,6 +445,65 @@ app.get("/substeps", async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+app.post("/send-email", async (req, res) => {
+  const { to } = req.body;
+
+  // Create a transporter using the SMTP details or email service provider configuration
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "seminamur1@gmail.com",
+      pass: "kmiazspycnqxdzcl",
+    },
+  });
+
+  // Create the email message
+  const password = generatePassword.generate({
+    length: 12,
+    numbers: true,
+    symbols: true,
+    uppercase: true,
+    lowercase: true,
+  });
+  //console.log(password);
+  const subject = "NEW PASSWORD";
+  const text = "New password: " + password;
+
+  const mailOptions = {
+    from: "your-email@example.com", // Sender's email address
+    to, // Recipient's email address (received from request body)
+    subject, // Email subject (received from request body)
+    text, // Email body (received from request body)
+  };
+
+  const userQuery = "SELECT id FROM parents WHERE email = $1";
+  const userValues = [to];
+  const userResult = await client.query(userQuery, userValues);
+
+  // Check if the user with the given username exists
+  if (userResult.rowCount === 0) {
+    res.status(404).send("User not found");
+    return;
+  }
+
+  const userId = userResult.rows[0].id;
+  const userQuery2 = "UPDATE parents SET password = $1 WHERE id = $2 ";
+  const userValues2 = [password, userId];
+  const userResult2 = await client.query(userQuery2, userValues2);
+  console.log("prvi", userResult);
+  console.log("drugi", userResult2);
+  // Send the email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: "Failed to send email" });
+    } else {
+      console.log("Email sent:", info.response);
+      res.json({ message: "Email sent successfully" });
+    }
+  });
 });
 
 app.listen(8000, () => {

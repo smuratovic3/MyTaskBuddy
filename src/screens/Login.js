@@ -113,7 +113,7 @@ export const Login = (props) => {
       </nav>
 
       <div className="auth-form-container">
-        <h2>Login</h2>
+        <h2>Prijava</h2>
         <form className="login-form" onSubmit={handleSubmit}>
           <label htmlFor="email">E-mail</label>
           <input

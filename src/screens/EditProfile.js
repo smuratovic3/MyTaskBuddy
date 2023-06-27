@@ -36,6 +36,9 @@ const EditProfile = () => {
   }, [parentId]);
 
   const handleSaveChanges = async () => {
+    if (!newEmail && !newPassword) {
+      alert("Empty fields!");
+    }
     try {
       const response = await axios.put(
         `http://localhost:8000/parents/${parentId}`,

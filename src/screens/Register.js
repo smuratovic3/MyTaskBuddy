@@ -120,7 +120,7 @@ export const Register = (props) => {
         </nav>
       </form>
       <div className="auth-form-container">
-        <h2>Register</h2>
+        <h2>Registracija</h2>
         <form className="register-form" onSubmit={handleSubmit}>
           <label htmlFor="name">Ime</label>
           <input
