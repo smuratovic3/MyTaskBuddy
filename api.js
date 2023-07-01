@@ -108,7 +108,6 @@ app.post("/tasks", async (req, res) => {
     }
 
     const userId = userResult.rows[0].id;
-    console.log("datae", date);
 
     const query = `INSERT INTO tasks (activity, date, "startTime", "endTime", location, priority, progress, status, "userId", "parentId")
                    VALUES ($1, $2, $3, $4, $5, $6, 0, 0, $7, $8)`;
@@ -217,7 +216,7 @@ app.put("/tasks/update", async (req, res) => {
 app.post("/tasks/getId", async (req, res) => {
   const { activity, date, startTime, endTime, location, priority, username } =
     req.body;
-  console.log(req.body);
+
   // Search for userId based on the provided username
   const userQuery = "SELECT id FROM users WHERE username = $1";
   const userValues = [username];
@@ -346,8 +345,6 @@ app.get("/parents/:parentId", async (req, res) => {
     const result = await client.query(query, values);
     const userData = result.rows[0];
 
-    //console.log(user.data);
-
     res.json(userData);
   } catch (error) {
     console.error("Error retrieving user data:", error);
@@ -467,9 +464,9 @@ app.post("/send-email", async (req, res) => {
     uppercase: true,
     lowercase: true,
   });
-  //console.log(password);
-  const subject = "NEW PASSWORD";
-  const text = "New password: " + password;
+
+  const subject = "VAŠA NOVA LOZINKA";
+  const text = "Vaša nova lozinka za aplikaciju je: " + password;
 
   const mailOptions = {
     from: "your-email@example.com", // Sender's email address
@@ -492,8 +489,7 @@ app.post("/send-email", async (req, res) => {
   const userQuery2 = "UPDATE parents SET password = $1 WHERE id = $2 ";
   const userValues2 = [password, userId];
   const userResult2 = await client.query(userQuery2, userValues2);
-  console.log("prvi", userResult);
-  console.log("drugi", userResult2);
+
   // Send the email
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {

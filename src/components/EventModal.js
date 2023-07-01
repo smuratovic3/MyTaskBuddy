@@ -58,7 +58,6 @@ function EventModal() {
     return bosnianDaysOfWeek[day];
   }
   function handleSubmit(e) {
-    console.log(daySelected);
     e.preventDefault();
     const calendarEvent = {
       title,
@@ -77,12 +76,12 @@ function EventModal() {
     } else {
       dispatchCalEvent({ type: "push", payload: calendarEvent });
     }
-    //console.log(calendarEvent);
 
     let priorityValue = isImportantTask === "high" ? 1 : 0;
 
     if (selectedEvent) {
       // Update tasks database
+
       axios
         .put(`http://localhost:8000/tasks/update`, {
           activity: title,
@@ -105,6 +104,7 @@ function EventModal() {
       setShowEventModal(false);
     } else {
       // Send data to the endpoint for tasks
+
       axios
         .post("http://localhost:8000/tasks", {
           activity: title,
@@ -118,7 +118,7 @@ function EventModal() {
         })
         .then((response) => {
           // Handle success
-          //console.log(response.data);
+          console.log(response.data);
 
           // Insert subtasks into the substeps table
           const subtasksPromises = subtasks.map((subtask) => {
@@ -138,7 +138,7 @@ function EventModal() {
           Promise.all(subtasksPromises)
             .then((subtasksResponses) => {
               // Handle success
-              //console.log(subtasksResponses);
+              console.log(subtasksResponses);
             })
             .catch((error) => {
               // Handle error

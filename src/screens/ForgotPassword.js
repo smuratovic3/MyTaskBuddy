@@ -14,12 +14,10 @@ export const ForgotPassword = (props) => {
 
   const handleChange = (event) => {
     setEmail(event.target.value);
-    //console.log(event.target.value);
   };
 
   async function sentForum(event) {
     event.preventDefault();
-    //console.log(email);
     try {
       const response = await axios.post("http://localhost:8000/send-email", {
         to: email,

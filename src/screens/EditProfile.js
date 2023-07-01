@@ -22,7 +22,6 @@ const EditProfile = () => {
             `http://localhost:8000/parents/${parentId}`
           ); // Replace with your actual API endpoint
           const userData = await response.json();
-          console.log(userData);
           setFirstName(userData.firstname);
           setLastName(userData.lastname);
           setEmail(userData.email);
@@ -47,7 +46,6 @@ const EditProfile = () => {
           password: newPassword,
         }
       );
-      console.log(response.data);
       setEmail(newEmail);
       setNewEmail("");
       setNewPassword("");

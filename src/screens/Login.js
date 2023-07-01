@@ -13,12 +13,10 @@ export const Login = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Prije responsa");
       const response = await axios.post("http://localhost:8000/login", {
         email: email,
         password: pass,
       });
-      console.log("Response", response);
 
       if (response.status === 200) {
         // Extract the parent ID from the response

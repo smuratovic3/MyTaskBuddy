@@ -24,7 +24,7 @@ function HomePage() {
     } catch (err) {
       window.location.replace("/");
     }
-  });
+  }, []);
 
   useEffect(() => {
     setCurrentMonth(getMonth(monthIndex));

@@ -14,21 +14,24 @@ function Day({ day, rowIdx }) {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/tasks?parentId=${localStorage.getItem(
-            "parentId"
-          )}`
-        );
-        if (response.ok) {
-          const tasks = await response.json();
-          const events = tasks.filter(
-            (task) =>
-              dayjs(task.date).format("YYYY-MM-DD") === day.format("YYYY-MM-DD")
+        if (localStorage.getItem("parentId")) {
+          const response = await fetch(
+            `http://localhost:8000/tasks?parentId=${localStorage.getItem(
+              "parentId"
+            )}`
           );
+          if (response.ok) {
+            const tasks = await response.json();
+            const events = tasks.filter(
+              (task) =>
+                dayjs(task.date).format("YYYY-MM-DD") ===
+                day.format("YYYY-MM-DD")
+            );
 
-          setDayEvents(events);
-        } else {
-          throw new Error("Failed to fetch tasks");
+            setDayEvents(events);
+          } else {
+            throw new Error("Failed to fetch tasks");
+          }
         }
       } catch (error) {
         console.error(error);
@@ -64,7 +67,6 @@ function Day({ day, rowIdx }) {
       <div
         className="flex-1 cursor-pointer"
         onClick={() => {
-          console.log("day", day);
           setDaySelected(day);
           setShowEventModal(true);
         }}
@@ -73,7 +75,6 @@ function Day({ day, rowIdx }) {
           <div
             key={evt.id}
             onClick={() => {
-              console.log("evt", evt);
               setSelectedEvent(evt);
             }}
             className={`bg-blue-200 p-1 mr-3 text-black text-sm font-bold rounded mb-1 truncate`}
