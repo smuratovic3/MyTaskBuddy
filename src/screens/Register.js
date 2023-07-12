@@ -14,6 +14,12 @@ export const Register = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!email || !pass || !firstname || !lastname) {
+      setMessage("Nisu ispunjena sva polja");
+      return;
+    }
+
     try {
       const response = await axios.post("http://localhost:8000/register", {
         firstname: firstname,

@@ -14,6 +14,8 @@ app.use(
 );
 app.use(cors());
 
+require("dotenv").config();
+
 // Serve static files from the build directory
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -47,13 +49,13 @@ app.post("/login", async (req, res) => {
       const parentId = result.rows[0].id;
       res
         .status(200)
-        .json({ message: "Logged in successfully!", parentId: parentId });
+        .json({ message: "Uspješno ste prijavljeni!", parentId: parentId });
     } else {
-      res.status(401).json({ message: "Invalid email or password" });
+      res.status(401).json({ message: "Nevalidan email ili password" });
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "An error occurred" });
+    res.status(500).json({ message: "Error" });
   }
 });
 
@@ -76,10 +78,10 @@ app.post("/register", async (req, res) => {
     const parentId = result.rows[0].id;
     res
       .status(200)
-      .json({ message: "Registration successful!", parentId: parentId });
+      .json({ message: "Uspješna registracija!", parentId: parentId });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "An error occurred" });
+    res.status(500).json({ message: "Error" });
   }
 });
 
@@ -103,7 +105,7 @@ app.post("/tasks", async (req, res) => {
 
     // Check if the user with the given username exists
     if (userResult.rowCount === 0) {
-      res.status(404).send("User not found");
+      res.status(404).send("Korisnik nije pronađen!");
       return;
     }
 
@@ -142,7 +144,7 @@ app.post("/tasks/delete", async (req, res) => {
 
   // Check if the user with the given username exists
   if (userResult.rowCount === 0) {
-    res.status(404).send("User not found");
+    res.status(404).send("Korisnik nije pronađen!");
     return;
   }
 
@@ -164,11 +166,11 @@ app.post("/tasks/delete", async (req, res) => {
   client
     .query(deleteQuery, values)
     .then((result) => {
-      res.status(200).send("Task deleted successfully");
+      res.status(200).send("Zadatak je uspješno obrisan!");
     })
     .catch((error) => {
       console.error(error);
-      res.status(500).send("Error occurred while deleting the task");
+      res.status(500).send("Error pri brisanju zadatka!");
     });
 });
 
@@ -191,7 +193,7 @@ app.put("/tasks/update", async (req, res) => {
 
   // Check if the user with the given username exists
   if (userResult.rowCount === 0) {
-    res.status(404).send("User not found");
+    res.status(404).send("Korisnik nije pronađen!");
     return;
   }
 
@@ -206,10 +208,10 @@ app.put("/tasks/update", async (req, res) => {
       [activity, date, startTime, endTime, location, priority, userId, taskId]
     );
 
-    return res.json({ message: "Task updated successfully" });
+    return res.json({ message: "Zadatak uspješno ažuriran" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to update task" });
+    return res.status(500).json({ error: "Greška pri ažuriranju zadatka!" });
   }
 });
 
@@ -224,7 +226,7 @@ app.post("/tasks/getId", async (req, res) => {
 
   // Check if the user with the given username exists
   if (userResult.rowCount === 0) {
-    res.status(404).send("User not found");
+    res.status(404).send("Korisnik nije pronađen!");
     return;
   }
 
@@ -252,7 +254,7 @@ app.post("/tasks/getId", async (req, res) => {
     const taskIdResult = await client.query(taskIdQuery, taskIdValues);
 
     if (taskIdResult.rows.length === 0) {
-      res.status(404).send("Task not found");
+      res.status(404).send("Zadatak nije pronađen!");
       return;
     }
 
@@ -284,7 +286,7 @@ app.post("/substeps", async (req, res) => {
 
   // Check if the user with the given username exists
   if (userResult.rowCount === 0) {
-    res.status(404).send("User not found");
+    res.status(404).send("Korisnik nije pronađen!");
     return;
   }
 
@@ -383,10 +385,10 @@ app.put("/parents/:parentId", async (req, res) => {
   }
   try {
     await client.query(query, values);
-    res.status(200).json({ message: "Profile updated successfully!" });
+    res.status(200).json({ message: "Uspješno ažuriran profil!" });
   } catch (error) {
-    console.error("Error updating profile:", error);
-    res.status(500).json({ error: "Failed to update profile" });
+    console.error("Error pri ažuriranju profila", error);
+    res.status(500).json({ error: "Greška prilikom ažuriranja profila!" });
   }
 });
 app.get("/tasks", async (req, res) => {
@@ -451,8 +453,8 @@ app.post("/send-email", async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "seminamur1@gmail.com",
-      pass: "kmiazspycnqxdzcl",
+      user: "mytaskbuddy0711@gmail.com",
+      pass: "tzudhbdixctghoru",
     },
   });
 
@@ -481,7 +483,7 @@ app.post("/send-email", async (req, res) => {
 
   // Check if the user with the given username exists
   if (userResult.rowCount === 0) {
-    res.status(404).send("User not found");
+    res.status(404).send("Korisnik nije pronađen!");
     return;
   }
 
@@ -494,10 +496,10 @@ app.post("/send-email", async (req, res) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error(error);
-      res.status(500).json({ error: "Failed to send email" });
+      res.status(500).json({ error: "Greška pri slanju emaila" });
     } else {
-      console.log("Email sent:", info.response);
-      res.json({ message: "Email sent successfully" });
+      console.log("Email je poslan:", info.response);
+      res.json({ message: "Email je uspješno isporučen" });
     }
   });
 });

@@ -2,9 +2,8 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import GlobalContext from "../context/GlobalContext";
 import axios from "axios";
 
-const parentId = localStorage.getItem("parentId");
-
 function EventModal() {
+  const parentId = localStorage.getItem("parentId");
   const { setShowEventModal, daySelected, dispatchCalEvent, selectedEvent } =
     useContext(GlobalContext);
 
@@ -95,7 +94,7 @@ function EventModal() {
         })
         .then((response) => {
           // Handle success
-          console.log(response.data);
+          //console.log(response.data);
         })
         .catch((error) => {
           // Handle error
@@ -118,7 +117,7 @@ function EventModal() {
         })
         .then((response) => {
           // Handle success
-          console.log(response.data);
+          //console.log(response.data);
 
           // Insert subtasks into the substeps table
           const subtasksPromises = subtasks.map((subtask) => {
@@ -138,7 +137,7 @@ function EventModal() {
           Promise.all(subtasksPromises)
             .then((subtasksResponses) => {
               // Handle success
-              console.log(subtasksResponses);
+              //console.log(subtasksResponses);
             })
             .catch((error) => {
               // Handle error
@@ -174,7 +173,7 @@ function EventModal() {
       })
       .then((response) => {
         // Handle success
-        console.log(response.data);
+        //console.log(response.data);
       })
       .catch((error) => {
         // Handle error
@@ -227,7 +226,7 @@ function EventModal() {
       }
     };
     if (selectedEvent) {
-      console.log(selectedEvent);
+      //console.log(selectedEvent);
     }
 
     document.addEventListener("mousedown", handleClickOutside);

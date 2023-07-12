@@ -20,7 +20,7 @@ const Statistics = () => {
     axios
       .get("http://localhost:8000/get-tasks")
       .then((response) => {
-        console.log(response.data);
+        //console.log(response.data);
         setData(response.data);
       })
       .catch((error) => {

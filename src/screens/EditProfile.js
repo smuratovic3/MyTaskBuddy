@@ -27,7 +27,7 @@ const EditProfile = () => {
           setEmail(userData.email);
         }
       } catch (error) {
-        console.error("Error retrieving user data:", error);
+        console.error("Greška pri preuzimanju korisničkih podataka", error);
       }
     };
 
@@ -36,7 +36,7 @@ const EditProfile = () => {
 
   const handleSaveChanges = async () => {
     if (!newEmail && !newPassword) {
-      alert("Empty fields!");
+      alert("Prazna polja!");
     }
     try {
       const response = await axios.put(
@@ -49,9 +49,9 @@ const EditProfile = () => {
       setEmail(newEmail);
       setNewEmail("");
       setNewPassword("");
-      alert("Profile updated successfully!");
+      alert("Uspješno ažuriran profil!");
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.error("Greška pri ažuriranju profila", error);
     }
   };
 
