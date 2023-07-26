@@ -1,15 +1,16 @@
 # MyTaskBuddy
 
-![Welcome screen](videiScreenova/AnimationWelcomeScreen.gif)
-![Login screen](videiScreenova/Login.gif)
-![Registration screen](videiScreenova/Register.gif)
-![Forgot password screen](videiScreenova/ForgotPass.gif)
-![Home page screen](videiScreenova/HomePage.gif)
-![Day screen](videiScreenova/KlikNaDan.gif)
-![Adding screen](videiScreenova/AddingTask.gif)
-![Preview task screen](videiScreenova/PreviewTask.gif)
-![Edit profile screen](videiScreenova/EditProfile.gif)
-![Statistics screen](videiScreenova/Statistics.gif)
+Screenshots/GIFs:
+![Welcome screen](./assets/images/AnimationWelcomeScreen.gif)
+![Login screen](./assets/images/AnimationLogin.gif)
+![Registration screen](./assets/images/AnimationRegister.gif)
+![Forgot password screen](./assets/images/AnimationForgotPass.gif)
+![Home page screen](./assets/images/AnimationHomePage.gif)
+![Day screen](./assets/images/AnimationKlikNaDan.gif)
+![Adding screen](./assets/images/AnimationAddingTask.gif)
+![Preview task screen](./assets/images/AnimationPreviewTask.gif)
+![Edit profile screen](./assets/images/AnimationEditProfile.gif)
+![Statistics screen](./assets/images/AnimationStatistics.gif)
 
 # Getting Started with Create React App
 
