@@ -1,3 +1,16 @@
+# MyTaskBuddy
+
+![Welcome screen](videiScreenova/AnimationWelcomeScreen.gif)
+![Login screen](videiScreenova/Login.gif)
+![Registration screen](videiScreenova/Register.gif)
+![Forgot password screen](videiScreenova/ForgotPass.gif)
+![Home page screen](videiScreenova/HomePage.gif)
+![Day screen](videiScreenova/KlikNaDan.gif)
+![Adding screen](videiScreenova/AddingTask.gif)
+![Preview task screen](videiScreenova/PreviewTask.gif)
+![Edit profile screen](videiScreenova/EditProfile.gif)
+![Statistics screen](videiScreenova/Statistics.gif)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
