@@ -454,7 +454,6 @@ app.post("/send-email", async (req, res) => {
     service: "gmail",
     auth: {
       user: "mytaskbuddy0711@gmail.com",
-      pass: "tzudhbdixctghoru",
     },
   });
 
